@@ -1,10 +1,69 @@
 <!doctype html>
-<html>
+<html lang="id">
   <head>
-    <meta http-equiv="refresh" content="0; url=/pages/index.html" />
-    <title>YonnAssistant</title>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>BERANDA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="/css/index.css" />
   </head>
   <body>
-    Redirecting...
+    <div class="welcome-container">
+      <!-- <button class="close-btn" onclick="history.back()">✕</button> -->
+      <button id="menuBtn" class="menu-btn">
+        <span class="material-symbols-rounded">menu</span>
+      </button>
+      <div id="menuPopup" class="menu-popup">
+        <a href="/pages/finance/home/home.html"> 🏠 Beranda </a>
+        <a href="../../notes.html"> 📝 Catatan </a>
+
+        <a href="#"> ⚙ Pengaturan </a>
+      </div>
+
+      <div class="welcome-content">
+        <img
+          src="../../assets/iconpack/hello.png"
+          alt="YonnGPT"
+          class="yonn-icon"
+        />
+
+        <h1>YonnGPT</h1>
+
+        <p>
+          how's ur day bro <br />
+          aman?
+        </p>
+
+        <button id="startBtn" class="start-btn">Mulai Ngobrol</button>
+      </div>
+    </div>
+
+    <script src="/script/script.js"></script>
+    <script>
+      const menuBtn = document.getElementById("menuBtn");
+      const menuPopup = document.getElementById("menuPopup");
+
+      menuBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        menuPopup.classList.toggle("show");
+      });
+
+      document.addEventListener("click", () => {
+        menuPopup.classList.remove("show");
+      });
+    </script>
   </body>
 </html>
