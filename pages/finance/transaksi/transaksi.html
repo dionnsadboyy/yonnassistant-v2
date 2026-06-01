@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Transaksi - YonnAssistant</title>
+    <meta
+      name="viewport"
+      content="width=device-width,
+           initial-scale=1,
+           maximum-scale=1,
+           user-scalable=no"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="transaksi.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  </head>
+  <body>
+    <div class="screen">
+      <main class="app">
+        <header class="page-header">
+          <div>
+            <p class="page-label">Yonn Assistant</p>
+            <h1>Transaksi</h1>
+          </div>
+
+          <button class="filter-btn" type="button" aria-label="Filter">
+            <span class="material-symbols-rounded">tune</span>
+          </button>
+        </header>
+
+        <div class="month-pill">Mei 2026</div>
+
+        <section class="summary-card">
+          <div class="summary-top">
+            <div>
+              <h3>Insight YonnGPT</h3>
+              <p>Update terakhir hari ini</p>
+            </div>
+            <a href="#" onclick="return false;">Lihat</a>
+          </div>
+
+          <div class="divider"></div>
+
+          <p class="summary-text" id="summaryText">Memuat data...</p>
+        </section>
+
+        <div class="filter-tabs">
+          <button class="tab active" id="allTab" type="button">Semua</button>
+          <button class="tab" id="incomeTab" type="button">Masuk</button>
+          <button class="tab" id="expenseTab" type="button">Keluar</button>
+        </div>
+
+        <section id="transactionList" class="date-groups"></section>
+      </main>
+
+      <nav class="bottom-nav">
+        <a class="nav-item" href="../home/home.html">
+          <span class="material-symbols-rounded">home</span>
+          <small>Beranda</small>
+        </a>
+
+        <a class="nav-item" href="../pengeluaran/pengeluaran.html">
+          <span class="material-symbols-rounded">shopping_cart</span>
+          <small>Pengeluaran</small>
+        </a>
+
+        <a class="nav-fab" href="../crudtransaksi/tambahtransaksi.html">
+          <span class="material-symbols-rounded">add</span>
+        </a>
+
+        <a class="nav-item active" href="./transaksi.html">
+          <span class="material-symbols-rounded">receipt_long</span>
+          <small>Transaksi</small>
+        </a>
+
+        <a class="nav-item" href="#">
+          <span class="material-symbols-rounded">smart_toy</span>
+          <small>YonnGPT</small>
+        </a>
+      </nav>
+    </div>
+
+    <script src="../../../script/supabase.js"></script>
+    <script src="./transaksi.js"></script>
+  </body>
+</html>

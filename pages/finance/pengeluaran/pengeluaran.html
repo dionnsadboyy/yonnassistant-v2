@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,
+           initial-scale=1,
+           maximum-scale=1,
+           user-scalable=no"
+    />
+    <title>YonnAssistant - Pengeluaran</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="pengeluaran.css" />
+  </head>
+  <body>
+    <div class="screen">
+      <main class="app expense-app">
+        <header class="page-head">
+          <div>
+            <p class="page-kicker">Yonn Assistant</p>
+            <h1>Pengeluaran</h1>
+          </div>
+
+          <button class="month-pill" type="button">Mei 2026</button>
+        </header>
+
+        <section class="overview-card">
+          <p class="overview-label">Total pengeluaran</p>
+
+          <div class="overview-amount">
+            <span class="rp">Rp</span>
+            <strong id="overviewTotal">0</strong>
+          </div>
+
+          <div class="chart-wrap">
+            <div class="donut" id="donutChart">
+              <div class="donut-center">
+                <span id="donutLabel">Pengeluaran Bulan ini</span>
+                <strong id="donutAmount">Rp0</strong>
+              </div>
+            </div>
+          </div>
+
+          <p class="avg-pill" id="avgPill">Memuat rata-rata...</p>
+          <p class="summary-text" id="summaryText">Memuat ringkasan...</p>
+        </section>
+
+        <section class="segment-row" aria-label="filter pengeluaran">
+          <button
+            class="segment active"
+            type="button"
+            data-mode="category"
+            id="segmentCategory"
+          >
+            Kategori
+          </button>
+          <button
+            class="segment"
+            type="button"
+            data-mode="account"
+            id="segmentAccount"
+          >
+            Akun
+          </button>
+          <button
+            class="segment"
+            type="button"
+            data-mode="merchant"
+            id="segmentMerchant"
+          >
+            Merchant
+          </button>
+        </section>
+
+        <section
+          class="legend-row"
+          aria-label="legend kategori"
+          id="legendRow"
+        ></section>
+
+        <section class="category-list" id="groupList"></section>
+      </main>
+
+      <nav class="bottom-nav">
+        <a class="nav-item" href="../home/home.html">
+          <span class="material-symbols-rounded">home</span>
+          <small>Beranda</small>
+        </a>
+
+        <a class="nav-item active" href="../pengeluaran/pengeluaran.html">
+          <span class="material-symbols-rounded">shopping_cart</span>
+          <small>Pengeluaran</small>
+        </a>
+
+        <a class="nav-fab" href="../crudtransaksi/tambahtransaksi.html">
+          <span class="material-symbols-rounded">add</span>
+        </a>
+
+        <a class="nav-item" href="../transaksi/transaksi.html">
+          <span class="material-symbols-rounded">receipt_long</span>
+          <small>Transaksi</small>
+        </a>
+
+        <a class="nav-item" href="#" onclick="return false;">
+          <span class="material-symbols-rounded">smart_toy</span>
+          <small>YonnGPT</small>
+        </a>
+      </nav>
+
+      <div
+        class="detail-overlay hidden"
+        id="detailOverlay"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="detailTitle"
+      >
+        <aside class="detail-sheet">
+          <div class="detail-head">
+            <div>
+              <p class="detail-kicker">Detail Pengeluaran</p>
+              <h2 id="detailTitle">-</h2>
+              <p class="detail-sub" id="detailSub">-</p>
+            </div>
+
+            <button
+              class="detail-close"
+              id="closeDetailBtn"
+              type="button"
+              aria-label="Tutup detail"
+            >
+              ×
+            </button>
+          </div>
+
+          <div class="detail-summary">
+            <div>
+              <span>Total</span>
+              <strong id="detailTotal">Rp 0</strong>
+            </div>
+
+            <div>
+              <span>Transaksi</span>
+              <strong id="detailCount">0</strong>
+            </div>
+          </div>
+
+          <div class="detail-list" id="detailList"></div>
+        </aside>
+      </div>
+    </div>
+
+    <script src="../../../script/supabase.js"></script>
+    <script src="./pengeluaran.js"></script>
+  </body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Tambah Transaksi - Yonn Assistant</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
+
+  <link rel="stylesheet" href="tambahtransaksi.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+  <div class="page">
+
+    <!-- HEADER -->
+
+    <header class="top-header">
+
+      <button
+        class="icon-btn"
+        id="closePageBtn"
+        type="button"
+      >
+        <span class="material-symbols-rounded">
+          close
+        </span>
+      </button>
+
+      <div class="header-title">
+        <h1>Catat Transaksi</h1>
+        <p>Yonn Assistant</p>
+      </div>
+
+      <button
+        class="upload-btn"
+        type="button"
+      >
+        Upload
+      </button>
+
+    </header>
+
+    <!-- FILTER -->
+
+    <section class="top-filter">
+
+      <button
+        class="pill active"
+        id="expenseBtn"
+        type="button"
+      >
+        Pengeluaran
+      </button>
+
+      <button
+        class="pill"
+        id="incomeBtn"
+        type="button"
+      >
+        Pemasukan
+      </button>
+
+      <button
+        class="pill"
+        id="dateBtn"
+        type="button"
+      >
+        📅 Hari Ini
+      </button>
+
+    </section>
+
+    <!-- NOMINAL -->
+
+    <section class="amount-section">
+
+      <span class="currency">
+        Rp
+      </span>
+
+      <div
+        class="amount-display"
+        id="amountDisplay"
+      >
+        0
+      </div>
+
+      <p class="amount-hint">
+        Tap nominal untuk input angka
+      </p>
+
+    </section>
+
+    <!-- FORM CARD -->
+
+    <section class="form-card">
+
+      <!-- WALLET -->
+
+      <div class="section-title">
+        Wallet
+      </div>
+
+      <div
+        class="wallet-scroll"
+        id="walletList"
+      >
+
+        <button
+          class="wallet-chip active"
+          data-wallet="1"
+        >
+          Cash
+        </button>
+
+        <button
+          class="wallet-chip"
+          data-wallet="2"
+        >
+          Jago
+        </button>
+
+        <button
+          class="wallet-chip"
+          data-wallet="3"
+        >
+          Tabungan
+        </button>
+
+        <button
+          class="wallet-chip"
+          data-wallet="4"
+        >
+          Buffer
+        </button>
+
+        <button
+          class="wallet-chip"
+          data-wallet="5"
+        >
+          Utility
+        </button>
+
+      </div>
+
+      <!-- KATEGORI -->
+
+      <div class="section-title">
+        Kategori
+      </div>
+
+      <div
+        class="field-select"
+        id="categoryButton"
+      >
+        Pilih kategori
+      </div>
+
+      <!-- hidden select buat JS -->
+
+      <select
+        id="categorySelect"
+        hidden
+      >
+      </select>
+
+      <!-- MERCHANT -->
+
+      <div class="section-title">
+        Merchant
+      </div>
+
+      <input
+        type="text"
+        id="merchantInput"
+        class="field-input"
+        placeholder="Contoh: Indomaret"
+      >
+
+      <!-- CATATAN -->
+
+      <div class="section-title">
+        Catatan
+      </div>
+
+      <textarea
+        id="noteInput"
+        class="field-textarea"
+        placeholder="Tambahkan catatan..."
+      ></textarea>
+
+      <!-- ACTION -->
+
+      <div class="action-row">
+
+        <button
+          class="secondary-btn"
+          id="resetBtn"
+          type="button"
+        >
+          Reset
+        </button>
+
+        <button
+          class="primary-btn"
+          id="saveBtn"
+          type="button"
+        >
+          Simpan
+        </button>
+
+      </div>
+
+    </section>
+
+  </div>
+
+  <!-- ===================== -->
+  <!-- NUMPAD MODAL -->
+  <!-- ===================== -->
+
+  <div
+    class="numpad-overlay hidden"
+    id="numpadOverlay"
+  >
+
+    <div
+      class="numpad-sheet"
+      id="numpadSheet"
+    >
+
+      <div class="numpad-header">
+        Masukkan Nominal
+      </div>
+
+      <div class="numpad-grid">
+
+        <button class="num-btn" data-value="1">1</button>
+        <button class="num-btn" data-value="2">2</button>
+        <button class="num-btn" data-value="3">3</button>
+
+        <button class="num-btn" data-value="4">4</button>
+        <button class="num-btn" data-value="5">5</button>
+        <button class="num-btn" data-value="6">6</button>
+
+        <button class="num-btn" data-value="7">7</button>
+        <button class="num-btn" data-value="8">8</button>
+        <button class="num-btn" data-value="9">9</button>
+
+        <button class="num-btn" data-value="000">
+          000
+        </button>
+
+        <button class="num-btn" data-value="0">
+          0
+        </button>
+
+        <button
+          class="num-btn delete-btn"
+          id="deleteBtn"
+        >
+          ⌫
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ===================== -->
+  <!-- CATEGORY MODAL -->
+  <!-- ===================== -->
+
+  <div
+    class="category-overlay hidden"
+    id="categoryOverlay"
+  >
+
+    <div class="category-sheet">
+
+      <div class="sheet-header">
+        Pilih Kategori
+      </div>
+
+      <div
+        class="category-list"
+        id="categoryList"
+      >
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="../../../script/supabase.js"></script>
+  <script src="tambahtransaksi.js"></script>
+
+</body>
+</html>

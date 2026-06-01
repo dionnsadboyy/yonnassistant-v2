@@ -1,0 +1,16 @@
+YonnAssistant V1.1
+
+29 Mei 2026
+
+SELESAI:
+- Deploy Vercel
+- Notes UI
+- Supabase Setup
+- Database Connect
+- Create Note
+
+NEXT:
+- Load Notes BERESSSS
+- Delete Note
+- Edit Note
+- Multi Device Sync

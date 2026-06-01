@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body>
+    test tab finance
+    <div class="finance-container">
+        Saldo Saat Ini
+
+Rp 485.000
+        
+  <div class="finance-header">
+    <h2>Finance Tracker</h2>
+  </div>
+
+  <div class="finance-form">
+      
+    <select id="transactionType">
+      <option value="Pengeluaran">
+        Pengeluaran
+      </option>
+
+      <option value="Pemasukan">
+        Pemasukan
+      </option>
+    </select>
+    
+    <input
+      type="number"
+      id="transactionAmount"
+      placeholder="Jumlah"
+    >
+
+    <input
+      type="text"
+      id="transactionDescription"
+      placeholder="Deskripsi"
+      >
+
+      <button id="saveTransactionBtn">
+      Simpan
+    </button>
+
+</div>
+
+  <div id="transactionsList"></div>
+
+</div>
+
+
+    <!-- SCRIPT -->
+    <script src="/script/supabase.js"></script>
+  <script src="/script/finance.js"></script>
+</body>
+</html>

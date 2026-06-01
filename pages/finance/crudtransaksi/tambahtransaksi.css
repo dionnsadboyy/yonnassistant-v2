@@ -1,0 +1,608 @@
+:root{
+  --primary:#7C4DFF;
+  --primary-dark:#6D3DF2;
+  --primary-soft:#F3EEFF;
+
+  --bg:#F6F7FB;
+  --card:#FFFFFF;
+
+  --text:#232330;
+  --muted:#8B90A0;
+
+  --shadow:
+    0 10px 30px rgba(0,0,0,.08);
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html,
+body{
+  overscroll-behavior: none;
+  width:100%;
+  height:100%;
+}
+
+body{
+  font-family:'Inter',sans-serif;
+
+  background:
+    linear-gradient(
+      180deg,
+      #7C4DFF 0%,
+      #6D3DF2 100%
+    );
+
+  overflow-x:hidden;
+}
+
+button,
+input,
+textarea,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.hidden{
+  display:none !important;
+}
+
+/* =========================
+   PAGE
+========================= */
+
+.page{
+  min-height:100vh;
+
+  display:flex;
+  flex-direction:column;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.top-header{
+  display:grid;
+
+  grid-template-columns:
+    48px
+    1fr
+    auto;
+
+  align-items:center;
+
+  gap:14px;
+
+  padding:
+    20px
+    20px
+    0;
+}
+
+.icon-btn{
+  width:48px;
+  height:48px;
+
+  border:none;
+
+  border-radius:50%;
+
+  background:
+    rgba(255,255,255,.15);
+
+  color:white;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  backdrop-filter:blur(10px);
+}
+
+.icon-btn .material-symbols-rounded{
+  font-size:24px;
+}
+
+.header-title{
+  text-align:center;
+}
+
+.header-title h1{
+  color:white;
+
+  font-size:18px;
+
+  font-weight:700;
+}
+
+.header-title p{
+  color:white;
+
+  opacity:.75;
+
+  font-size:12px;
+
+  margin-top:2px;
+}
+
+.upload-btn{
+  border:none;
+
+  height:42px;
+
+  padding:0 16px;
+
+  border-radius:999px;
+
+  background:white;
+
+  color:var(--primary);
+
+  font-weight:700;
+}
+
+/* =========================
+   FILTER
+========================= */
+
+.top-filter{
+  display:flex;
+
+  gap:10px;
+
+  padding:
+    20px
+    20px
+    0;
+
+  overflow-x:auto;
+
+  scrollbar-width:none;
+}
+
+.top-filter::-webkit-scrollbar{
+  display:none;
+}
+
+.pill{
+  border:none;
+
+  height:42px;
+
+  padding:0 18px;
+
+  border-radius:999px;
+
+  flex:none;
+
+  color:white;
+
+  background:
+    rgba(255,255,255,.12);
+
+  font-weight:600;
+}
+
+.pill.active{
+  background:white;
+  color:var(--primary);
+}
+
+/* =========================
+   NOMINAL
+========================= */
+
+.amount-section{
+  min-height:180px;
+
+  display:flex;
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:center;
+
+  padding:24px 20px 36px;
+}
+.currency{
+  font-size:24px;
+
+  opacity:.85;
+}
+
+.amount-display{
+  margin-top:8px;
+
+  font-size:72px;
+
+  font-weight:800;
+
+  line-height:1;
+
+  cursor:pointer;
+
+  user-select:none;
+}
+
+.amount-hint{
+  margin-top:12px;
+
+  font-size:13px;
+
+  opacity:.75;
+}
+
+/* =========================
+   FORM CARD
+========================= */
+
+.form-card{
+  background:white;
+
+  border-radius:30px 30px 0 0;
+
+  padding:22px 18px 28px;
+
+  min-height:auto;
+
+  margin-top:-10px;
+}
+
+.section-title{
+  color:var(--muted);
+
+  font-size:13px;
+
+  font-weight:700;
+
+  margin-bottom:10px;
+}
+
+.section-title:not(:first-child){
+  margin-top:20px;
+}
+
+/* =========================
+   WALLET
+========================= */
+
+.wallet-scroll{
+  display:flex;
+
+  gap:10px;
+
+  overflow-x:auto;
+
+  scrollbar-width:none;
+
+  padding-bottom:12px;
+}
+
+.wallet-scroll::-webkit-scrollbar{
+  display:none;
+}
+
+.wallet-chip{
+  flex:none;
+
+  border:none;
+
+  height:36px;
+  padding:0 14px;
+  font-size:12px;
+
+  border-radius:999px;
+
+  background:#F4F5F8;
+
+  color:#555;
+
+  font-weight:600;
+}
+
+.wallet-chip.active{
+  background:var(--primary);
+
+  color:white;
+}
+
+/* =========================
+   CATEGORY BUTTON
+========================= */
+
+.field-select{
+  width:100%;
+
+  height:48px;
+
+  border:none;
+
+  border-radius:18px;
+
+  background:#F5F6FA;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:0 16px;
+
+  color:#444;
+
+  font-weight:500;
+}
+
+.field-select::after{
+  content:"⌄";
+
+  font-size:20px;
+
+  color:#999;
+}
+
+/* =========================
+   INPUT
+========================= */
+
+.field-input{
+  width:100%;
+
+  height:48px;
+
+  border:none;
+
+  border-radius:18px;
+
+  background:#F5F6FA;
+
+  padding:0 16px;
+
+  outline:none;
+}
+
+.field-textarea{
+  width:100%;
+
+  min-height:100px;
+
+  border:none;
+
+  border-radius:18px;
+
+  background:#F5F6FA;
+
+  padding:16px;
+
+  resize:none;
+
+  outline:none;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.action-row{
+  margin-top:26px;
+
+  display:grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap:12px;
+}
+
+.secondary-btn{
+  border:none;
+
+  height: 48px;
+
+  border-radius:16px;
+
+  background:#EEF1F7;
+
+  font-weight:700;
+}
+
+.primary-btn{
+  border:none;
+
+  height: 48px;
+
+  border-radius:16px;
+
+  background:var(--primary);
+
+  color:white;
+
+  font-weight:700;
+}
+
+/* =========================
+   NUMPAD
+========================= */
+
+.numpad-overlay{
+  position:fixed;
+
+  inset:0;
+
+  background:
+    rgba(0,0,0,.25);
+
+  display:flex;
+  align-items:flex-end;
+
+  z-index:9999;
+}
+
+.numpad-sheet{
+  width:100%;
+
+  background:#D9D9D9;
+
+  border-radius:
+    30px
+    30px
+    0
+    0;
+
+  padding:
+    18px
+    16px
+    30px;
+
+  animation:
+    slideUp .2s ease;
+}
+
+.numpad-header{
+  text-align:center;
+
+  margin-bottom:18px;
+
+  font-weight:600;
+
+  color:#555;
+}
+
+.numpad-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:12px;
+}
+
+.num-btn{
+  border:none;
+
+  height:82px;
+
+  border-radius:18px;
+
+  background:white;
+
+  font-size:26px;
+
+  font-weight:700;
+}
+
+.delete-btn{
+  font-size:30px;
+}
+.numpad-overlay,
+.numpad-sheet,
+.numpad-grid,
+.num-btn,
+.delete-btn {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* =========================
+   CATEGORY MODAL
+========================= */
+
+.category-overlay{
+  position:fixed;
+
+  inset:0;
+
+  background:
+    rgba(0,0,0,.25);
+
+  display:flex;
+  align-items:flex-end;
+
+  z-index:10000;
+}
+
+.category-sheet{
+  width:100%;
+
+  background:white;
+
+  border-radius:
+    30px
+    30px
+    0
+    0;
+
+  padding:20px;
+
+  max-height:55vh;
+
+  animation:
+    slideUp .2s ease;
+}
+
+.sheet-header{
+  font-size:18px;
+
+  font-weight:700;
+
+  margin-bottom:16px;
+}
+
+.category-list{
+  display:flex;
+
+  flex-direction:column;
+
+  gap:10px;
+
+  max-height:320px;
+
+  overflow-y:auto;
+}
+
+.category-item{
+  border:none;
+
+  height:52px;
+
+  border-radius:14px;
+
+  background:#F5F6FA;
+
+  text-align:left;
+
+  padding:0 16px;
+
+  font-weight:600;
+}
+
+/* =========================
+   ANIMATION
+========================= */
+
+@keyframes slideUp{
+
+  from{
+    transform:
+      translateY(100%);
+  }
+
+  to{
+    transform:
+      translateY(0);
+  }
+
+}
+
+/* =========================
+   MOBILE
+========================= */

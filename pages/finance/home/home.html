@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,
+           initial-scale=1,
+           maximum-scale=1,
+           user-scalable=no"
+    />
+    <title>YonnAssistant</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="home.css" />
+  </head>
+  <body>
+    <div class="screen">
+      <main class="app">
+        <section class="header">
+          <div>
+            <p class="welcome-label">Yonn Assistant</p>
+            <h1>👋 Halo Yonn</h1>
+          </div>
+
+          <a
+            href="../finance/index.html"
+            class="profile-btn"
+            aria-label="Profil"
+          >
+            <span class="material-symbols-rounded">person</span>
+          </a>
+        </section>
+
+        <section class="month-section">
+          <button class="month-pill active-tab" id="monthTab" type="button">
+            Mei 2026
+          </button>
+
+          <button class="month-pill" id="totalTab" type="button">
+            Total Saldo
+          </button>
+        </section>
+
+        <section class="balance-wrapper">
+          <section class="balance-card" id="monthCard">
+            <p class="card-label">Sisa Keuangan Positif</p>
+
+            <h2 class="balance-amount" id="monthBalance">Rp 0</h2>
+
+            <div class="divider"></div>
+
+            <div class="finance-stats">
+              <div class="stat-item">
+                <div class="stat-icon income">
+                  <span class="material-symbols-rounded">south</span>
+                </div>
+
+                <div>
+                  <small>Pemasukan</small>
+                  <strong id="incomeValue">Rp 0</strong>
+                </div>
+              </div>
+
+              <div class="stat-item">
+                <div class="stat-icon expense">
+                  <span class="material-symbols-rounded">north</span>
+                </div>
+
+                <div>
+                  <small>Pengeluaran</small>
+                  <strong id="expenseValue">Rp 0</strong>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="balance-card hidden" id="walletCard">
+            <p class="card-label">Total Seluruh Saldo</p>
+
+            <h2 class="balance-amount" id="totalAsset">Rp 0</h2>
+
+            <div class="divider"></div>
+
+            <div class="wallet-scroll" id="walletList"></div>
+          </section>
+        </section>
+        <section class="insight-card" id="insightCard">
+          <div class="insight-header">
+            <h3>💡 Insight YonnGPT</h3>
+            <span>Lihat</span>
+          </div>
+
+          <p class="insight-subtitle">Update terakhir hari ini</p>
+          <div id="insightContent">Memuat insight...</div>
+        </section>
+
+        <section class="feature-scroll">
+          <a href="#" class="feature-item" onclick="return false;">
+            <div class="feature-icon">🤖</div>
+            <span>YonnGPT</span>
+          </a>
+
+          <a href="#" class="feature-item" onclick="return false;">
+            <div class="feature-icon">📊</div>
+            <span>Weekly</span>
+          </a>
+
+          <a href="#" class="feature-item" onclick="return false;">
+            <div class="feature-icon">📈</div>
+            <span>Laporan</span>
+          </a>
+
+          <a href="#" class="feature-item" onclick="return false;">
+            <div class="feature-icon">🧾</div>
+            <span>Upload</span>
+          </a>
+
+          <a href="#" class="feature-item" onclick="return false;">
+            <div class="feature-icon">🧠</div>
+            <span>Konsultasi</span>
+          </a>
+        </section>
+
+        <section class="card">
+          <div class="card-title">
+            <h2>Transaksi Terakhir</h2>
+          </div>
+
+          <div id="recentTransactions"></div>
+        </section>
+      </main>
+
+      <nav class="bottom-nav">
+        <a class="nav-item active" href="../home/home.html">
+          <span class="material-symbols-rounded">home</span>
+          <small>Beranda</small>
+        </a>
+
+        <a class="nav-item" href="../pengeluaran/pengeluaran.html">
+          <span class="material-symbols-rounded">shopping_cart</span>
+          <small>Pengeluaran</small>
+        </a>
+
+        <a class="nav-fab" href="../crudtransaksi/tambahtransaksi.html">
+          <span class="material-symbols-rounded">add</span>
+        </a>
+
+        <a class="nav-item" href="../transaksi/transaksi.html">
+          <span class="material-symbols-rounded">receipt_long</span>
+          <small>Transaksi</small>
+        </a>
+
+        <a class="nav-item" href="#" onclick="return false;">
+          <span class="material-symbols-rounded">smart_toy</span>
+          <small>YonnGPT</small>
+        </a>
+      </nav>
+    </div>
+
+    <script src="../../../script/supabase.js"></script>
+    <script src="./home.js"></script>
+  </body>
+</html>
