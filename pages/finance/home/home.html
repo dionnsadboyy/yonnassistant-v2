@@ -21,7 +21,6 @@
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
       rel="stylesheet"
     />
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="home.css" />
   </head>
@@ -33,14 +32,16 @@
             <p class="welcome-label">Yonn Assistant</p>
             <h1>👋 Halo Yonn</h1>
           </div>
+          <button id="menuBtn" class="menu-btn">
+            <span class="material-symbols-rounded">menu</span>
+          </button>
+          <div id="menuPopup" class="menu-popup">
+            <a href="../../index.html"> 🏠 Beranda </a>
 
-          <a
-            href="../finance/index.html"
-            class="profile-btn"
-            aria-label="Profil"
-          >
-            <span class="material-symbols-rounded">person</span>
-          </a>
+            <a href="../../notes.html"> 📝 Catatan </a>
+
+            <a href="#"> ⚙ Pengaturan </a>
+          </div>
         </section>
 
         <section class="month-section">
@@ -107,7 +108,7 @@
         </section>
 
         <section class="feature-scroll">
-          <a href="#" class="feature-item" onclick="return false;">
+          <a href="../../yonngpt/chat.html" class="feature-item">
             <div class="feature-icon">🤖</div>
             <span>YonnGPT</span>
           </a>
@@ -162,7 +163,7 @@
           <small>Transaksi</small>
         </a>
 
-        <a class="nav-item" href="#" onclick="return false;">
+        <a class="nav-item" href="../../yonngpt/chat.html">
           <span class="material-symbols-rounded">smart_toy</span>
           <small>YonnGPT</small>
         </a>

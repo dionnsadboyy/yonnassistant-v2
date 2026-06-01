@@ -1,3 +1,6 @@
+html{
+  touch-action:manipulation;
+}
 *{
   margin:0;
   padding:0;
@@ -6,14 +9,17 @@
 }
 
 body{
-  font-family:Inter,sans-serif;
-  background:#f6f7fb;
+  margin:0;
+  padding:0;
+  height:100%;
+  overflow:hidden;
 }
 
 .chat-page{
-  height:100vh;
+  height:100dvh;
   display:flex;
   flex-direction:column;
+  overflow:hidden;
 }
 
 .chat-header{
@@ -134,22 +140,18 @@ body{
 .chat-input{
   display:flex;
   gap:10px;
-
-  padding:12px;
-
+  padding:16px;
   background:white;
 }
 
 .chat-input input{
   flex:1;
-
   border:none;
-
   background:#f3f4f6;
-
   border-radius:16px;
+  padding:16px;
 
-  padding:14px;
+  font-size:16px;
 }
 
 .chat-input button{
@@ -165,6 +167,11 @@ body{
   color:white;
 
   font-size:18px;
+}
+button,
+.quick-btn,
+.back-btn{
+  touch-action:manipulation;
 }
 .typing{
   display:flex;

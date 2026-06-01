@@ -2,7 +2,7 @@
    YONNGPT V4
 ========================================================= */
 
-const API_URL = "http://localhost:3000/api/ai/chat";
+const API_URL = "http://172.20.10.2:3000/api/ai/chat";
 
 /* =========================================================
    ELEMENTS
@@ -228,8 +228,6 @@ quickButtons.forEach((btn) => {
 
 window.addEventListener("load", () => {
   setTimeout(() => {
-    input.focus();
-
     scrollBottom();
   }, 300);
 

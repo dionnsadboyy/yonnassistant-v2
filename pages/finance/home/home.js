@@ -114,6 +114,18 @@ const insightContent = document.getElementById("insightContent");
 // LOAD DASHBOARD
 // ======================
 
+const menuBtn = document.getElementById("menuBtn");
+const menuPopup = document.getElementById("menuPopup");
+
+menuBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  menuPopup.classList.toggle("show");
+});
+
+document.addEventListener("click", () => {
+  menuPopup.classList.remove("show");
+});
+
 async function loadDashboard() {
   console.log("Loading dashboard...");
 

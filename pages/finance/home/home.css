@@ -84,21 +84,82 @@ a{
   letter-spacing:-0.5px;
 }
 
-.profile-btn{
+.menu-btn{
   width:42px;
   height:42px;
+
+  border:none;
   border-radius:50%;
+
   background:white;
-  color:var(--primary);
+
   display:flex;
   align-items:center;
   justify-content:center;
-  text-decoration:none;
-  box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+  cursor:pointer;
 }
 
-.profile-btn .material-symbols-rounded{
+.menu-btn .material-symbols-rounded{
   font-size:22px;
+  color:#7c3aed;
+}
+.menu-btn{
+  width:42px;
+  height:42px;
+
+  border:none;
+  border-radius:50%;
+
+  background:white;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.menu-popup{
+  position:absolute;
+
+  top:70px;
+  right:16px;
+
+  width:180px;
+
+  background:white;
+
+  border-radius:18px;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.12);
+
+  padding:8px;
+
+  display:none;
+
+  z-index:999;
+}
+
+.menu-popup.show{
+  display:block;
+}
+
+.menu-popup a{
+  display:flex;
+  align-items:center;
+
+  gap:10px;
+
+  padding:12px;
+
+  color:#333;
+  text-decoration:none;
+
+  border-radius:12px;
+}
+
+.menu-popup a:hover{
+  background:#f5f3ff;
 }
 
 /* MONTH */
