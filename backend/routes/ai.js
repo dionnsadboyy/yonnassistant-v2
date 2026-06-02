@@ -11,7 +11,14 @@ const {
 
 router.post("/chat", async (req, res) => {
   try {
-    const { message } = req.body;
+    const { message } = req.body || {};
+
+    if (!message || !message.trim()) {
+      return res.status(400).json({
+        success: false,
+        error: "Message is required",
+      });
+    }
 
     const decision = await decideNeedDatabase(message);
 
@@ -29,10 +36,10 @@ router.post("/chat", async (req, res) => {
       .from("transactions")
       .select(
         `
-                    *,
-                    categories(name),
-                    wallets(name)
-                `,
+          *,
+          categories(name),
+          wallets(name)
+        `,
       )
       .order("transaction_date", {
         ascending: false,
@@ -43,7 +50,7 @@ router.post("/chat", async (req, res) => {
       throw error;
     }
 
-    const answer = await answerWithDatabase(message, data);
+    const answer = await answerWithDatabase(message, data || []);
 
     return res.json({
       success: true,
@@ -55,7 +62,7 @@ router.post("/chat", async (req, res) => {
 
     return res.status(500).json({
       success: false,
-      error: err.message,
+      error: err.message || "Internal Server Error",
     });
   }
 });
