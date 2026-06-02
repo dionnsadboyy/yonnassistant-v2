@@ -1,26 +1,25 @@
-app.options("*", cors());
 const express = require("express");
-require("dotenv").config();
 const cors = require("cors");
-
-app.use(
-  cors({
-    origin: "*",
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  }),
-);
-const path = require("path");
+require("dotenv").config();
 
 const app = express();
 
 app.use(cors());
+
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname, "../")));
-
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "../pages/home/home.html"));
+  res.json({
+    status: "YonnGPT Backend Online",
+    version: "2.0",
+  });
+});
+
+app.get("/ping", (req, res) => {
+  res.json({
+    success: true,
+    message: "pong",
+  });
 });
 
 app.use("/api/ai", require("./routes/ai"));
