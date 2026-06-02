@@ -1,6 +1,3 @@
-router.options("/chat", (req, res) => {
-  res.sendStatus(200);
-});
 const express = require("express");
 const router = express.Router();
 
