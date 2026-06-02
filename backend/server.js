@@ -22,7 +22,7 @@ app.get("/ping", (req, res) => {
   });
 });
 
-app.use("/api/ai", require("./routes/ai"));
+// app.use("/api/ai", require("./routes/ai"));
 
 const PORT = process.env.PORT || 3000;
 
