@@ -2,7 +2,8 @@
    YONNGPT V4
 ========================================================= */
 
-const API_URL = "https://yonnassistant.up.railway.app/api/ai/chat";
+const API_URL =
+  "https://yonnassistant-v2-production.up.railway.app/api/ai/chat";
 
 /* =========================================================
    ELEMENTS
