@@ -4,20 +4,7 @@ require("dotenv").config();
 
 const app = express();
 
-app.use(
-  cors({
-    origin: [
-      "https://yonnassistant-v1.vercel.app",
-      "http://localhost:5500",
-      "http://127.0.0.1:5500",
-      "http://localhost:5501",
-      "http://127.0.0.1:5501",
-    ],
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  }),
-);
-
+app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -34,7 +21,8 @@ app.get("/ping", (req, res) => {
   });
 });
 
-app.use("/api/ai", require("./routes/ai"));
+// sementara matikan dulu buat isolasi
+// app.use("/api/ai", require("./routes/ai"));
 
 const PORT = process.env.PORT || 3000;
 
