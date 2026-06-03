@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const API_URL = "https://core.snifoxai.com/v1/chat/completions";
-const MODEL = "openai/gpt-5.2";
+const MODEL = "google/gemini-2.5-flash";
 
 function ensureApiKey() {
   if (!process.env.SNIFOX_API_KEY) {
