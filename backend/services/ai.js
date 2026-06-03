@@ -18,6 +18,7 @@ function stripCodeFence(text) {
 }
 
 async function callGPT(messages) {
+  console.time("SNIFOX_API");
   ensureApiKey();
 
   const response = await fetch(API_URL, {
@@ -45,6 +46,7 @@ async function callGPT(messages) {
   if (!content) {
     throw new Error("Snifox returned empty content");
   }
+  console.timeEnd("SNIFOX_API");
 
   return content;
 }
