@@ -71,7 +71,7 @@ router.post("/chat", async (req, res) => {
       .order("transaction_date", {
         ascending: false,
       })
-      .limit(500);
+      .limit(50);
 
     console.timeEnd("SUPABASE");
 
