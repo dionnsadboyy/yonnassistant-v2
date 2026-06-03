@@ -3,11 +3,7 @@ const router = express.Router();
 
 const supabase = require("../services/db");
 
-const {
-  decideNeedDatabase,
-  answerNormal,
-  answerWithDatabase,
-} = require("../services/ai");
+const { answerNormal, answerWithDatabase } = require("../services/ai");
 
 router.post("/chat", async (req, res) => {
   console.time("TOTAL_REQUEST");
@@ -22,13 +18,31 @@ router.post("/chat", async (req, res) => {
       });
     }
 
-    console.time("ROUTER_AI");
+    const dbKeywords = [
+      "uang",
+      "saldo",
+      "pengeluaran",
+      "pemasukan",
+      "transaksi",
+      "budget",
+      "anggaran",
+      "dompet",
+      "wallet",
+      "laporan",
+      "bulan",
+      "minggu",
+      "cashflow",
+      "keuangan",
+      "boros",
+      "hutang",
+      "tabungan",
+    ];
 
-    const decision = await decideNeedDatabase(message);
+    const needDatabase = dbKeywords.some((keyword) =>
+      message.toLowerCase().includes(keyword),
+    );
 
-    console.timeEnd("ROUTER_AI");
-
-    if (!decision.needDatabase) {
+    if (!needDatabase) {
       console.time("NORMAL_AI");
 
       const answer = await answerNormal(message);
@@ -49,9 +63,9 @@ router.post("/chat", async (req, res) => {
       .from("transactions")
       .select(
         `
-          *,
-          categories(name),
-          wallets(name)
+        *,
+        categories(name),
+        wallets(name)
       `,
       )
       .order("transaction_date", {
