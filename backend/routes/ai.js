@@ -10,6 +10,8 @@ const {
 } = require("../services/ai");
 
 router.post("/chat", async (req, res) => {
+  console.time("TOTAL_REQUEST");
+
   try {
     const { message } = req.body || {};
 
@@ -20,10 +22,19 @@ router.post("/chat", async (req, res) => {
       });
     }
 
+    console.time("ROUTER_AI");
+
     const decision = await decideNeedDatabase(message);
 
+    console.timeEnd("ROUTER_AI");
+
     if (!decision.needDatabase) {
+      console.time("NORMAL_AI");
+
       const answer = await answerNormal(message);
+
+      console.timeEnd("NORMAL_AI");
+      console.timeEnd("TOTAL_REQUEST");
 
       return res.json({
         success: true,
@@ -32,6 +43,8 @@ router.post("/chat", async (req, res) => {
       });
     }
 
+    console.time("SUPABASE");
+
     const { data, error } = await supabase
       .from("transactions")
       .select(
@@ -39,18 +52,25 @@ router.post("/chat", async (req, res) => {
           *,
           categories(name),
           wallets(name)
-        `,
+      `,
       )
       .order("transaction_date", {
         ascending: false,
       })
       .limit(500);
 
+    console.timeEnd("SUPABASE");
+
     if (error) {
       throw error;
     }
 
+    console.time("DATABASE_AI");
+
     const answer = await answerWithDatabase(message, data || []);
+
+    console.timeEnd("DATABASE_AI");
+    console.timeEnd("TOTAL_REQUEST");
 
     return res.json({
       success: true,
