@@ -1,0 +1,484 @@
+/* ==========================================
+   YONN NOTES V3
+========================================== */
+
+:root{
+  --primary:#7C4DFF;
+
+  --bg:#F6F7FB;
+  --card:#FFFFFF;
+
+  --text:#23242B;
+  --muted:#8B92A6;
+
+  --border:#ECEEF5;
+
+  --shadow:0 8px 25px rgba(0,0,0,.05);
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html,
+body{
+  min-height:100%;
+}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+.mobile-layout{
+  max-width:414px;
+  margin:0 auto;
+  min-height:100vh;
+}
+
+.mobile-notes-page{
+  padding:20px 16px 110px;
+}
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.page-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.page-label{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:4px;
+}
+
+.page-header h1{
+  font-size:28px;
+  font-weight:800;
+  letter-spacing:-.5px;
+}
+
+.filter-btn{
+  border:none;
+
+  width:48px;
+  height:48px;
+
+  border-radius:16px;
+
+  background:var(--primary);
+  color:#fff;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  box-shadow:
+    0 10px 24px rgba(124,77,255,.28);
+
+  cursor:pointer;
+}
+
+.filter-btn .material-symbols-rounded{
+  font-size:22px;
+}
+
+/* ==========================================
+   SEARCH
+========================================== */
+
+.search{
+  margin-top:22px;
+  margin-bottom:26px;
+
+  position:relative;
+}
+
+.search input{
+  width:100%;
+  height:58px;
+
+  border:none;
+  outline:none;
+
+  border-radius:18px;
+
+  background:white;
+
+  padding:0 18px;
+
+  font-size:14px;
+
+  box-shadow:
+    0 10px 24px rgba(124,77,255,.08);
+
+  border:2px solid rgba(124,77,255,.08);
+}
+
+.search input:focus{
+  border-color:rgba(124,77,255,.35);
+}
+
+/* ==========================================
+   MENU POPUP
+========================================== */
+
+.menu-popup{
+  position:absolute;
+
+  top:85px;
+  right:0;
+
+  width:190px;
+
+  background:linear-gradient(
+    180deg,
+    #F5F1FF 0%,
+    #EEE8FF 100%
+  );
+
+  border:1px solid #E7DEFF;
+
+  border-radius:22px;
+
+  padding:10px;
+
+  display:none;
+
+  box-shadow:
+    0 16px 40px rgba(124,77,255,.15);
+
+  z-index:999;
+}
+
+.menu-popup.show{
+  display:block;
+}
+
+.menu-item{
+  width:100%;
+
+  border:none;
+
+  background:transparent;
+
+  border-radius:16px;
+
+  padding:12px;
+
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.menu-item:hover{
+  background:rgba(124,77,255,.10);
+}
+
+.menu-icon{
+  width:40px;
+  height:40px;
+
+  border-radius:14px;
+
+  background:#7C4DFF;
+
+  color:white;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  box-shadow:
+    0 8px 18px rgba(124,77,255,.25);
+}
+
+.menu-item span{
+  font-size:14px;
+  font-weight:700;
+
+  color:#2B2B35;
+}
+
+/* ==========================================
+   SECTION
+========================================== */
+
+.section{
+  font-size:18px;
+  font-weight:800;
+
+  margin-bottom:16px;
+}
+
+/* ==========================================
+   GRID
+========================================== */
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.card{
+  background:white;
+
+  border-radius:22px;
+
+  padding:18px;
+
+  border:1px solid var(--border);
+
+  box-shadow:var(--shadow);
+
+  cursor:pointer;
+
+  transition:.2s ease;
+}
+
+.card:hover{
+  transform:translateY(-2px);
+}
+
+.card h3{
+  font-size:15px;
+  font-weight:800;
+
+  margin-bottom:10px;
+}
+
+.small{
+  font-size:13px;
+  line-height:1.6;
+
+  color:var(--muted);
+}
+
+/* ==========================================
+   MEMORY
+========================================== */
+
+.music{
+  margin-top:22px;
+
+  background:white;
+
+  border-radius:24px;
+
+  padding:18px;
+
+  border:1px solid var(--border);
+
+  box-shadow:var(--shadow);
+}
+
+.player{
+  background:#F2EDFF;
+
+  border-radius:18px;
+
+  padding:16px;
+
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.play{
+  width:46px;
+  height:46px;
+
+  border-radius:50%;
+
+  background:var(--primary);
+
+  color:white;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:18px;
+
+  box-shadow:
+    0 10px 24px rgba(124,77,255,.22);
+}
+
+.memory-desc{
+  margin-top:14px;
+
+  line-height:1.7;
+  font-size:14px;
+
+  color:var(--muted);
+}
+
+/* ==========================================
+   EMPTY STATE
+========================================== */
+
+.mobile-empty-state{
+  margin-top:20px;
+
+  background:white;
+
+  border-radius:22px;
+
+  padding:24px;
+
+  text-align:center;
+
+  border:1px solid var(--border);
+
+  box-shadow:var(--shadow);
+}
+
+.mobile-empty-state h3{
+  margin-bottom:8px;
+}
+
+.mobile-empty-state p{
+  color:var(--muted);
+  line-height:1.6;
+}
+
+/* ==========================================
+   FAB
+========================================== */
+
+.fab{
+  position:fixed;
+
+  right:24px;
+  bottom:24px;
+
+  width:68px;
+  height:68px;
+
+  border:none;
+
+  border-radius:50%;
+
+  background:var(--primary);
+  color:white;
+
+  font-size:40px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  box-shadow:
+    0 14px 30px rgba(124,77,255,.30);
+
+  cursor:pointer;
+
+  z-index:999;
+}
+
+/* ==========================================
+   TYPE PICKER
+========================================== */
+
+.type-picker{
+  position:fixed;
+  inset:0;
+
+  display:none;
+
+  z-index:9999;
+}
+
+.type-picker.show{
+  display:block;
+}
+
+.type-picker-backdrop{
+  position:absolute;
+  inset:0;
+
+  background:rgba(0,0,0,.35);
+  backdrop-filter:blur(6px);
+}
+
+.type-picker-sheet{
+  position:absolute;
+
+  left:0;
+  right:0;
+  bottom:0;
+
+  background:white;
+
+  border-radius:24px 24px 0 0;
+
+  padding:14px 16px 24px;
+
+  box-shadow:
+    0 -12px 30px rgba(0,0,0,.12);
+}
+
+.type-picker-drag{
+  width:44px;
+  height:5px;
+
+  border-radius:999px;
+
+  background:#ddd;
+
+  margin:0 auto 16px;
+}
+
+.type-picker-row{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.type-mini{
+  border:none;
+
+  background:#F6F2FF;
+
+  border-radius:18px;
+
+  padding:16px 10px;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+
+  cursor:pointer;
+}
+
+.type-emoji{
+  font-size:28px;
+}
+
+.type-mini small{
+  color:#666;
+  font-weight:600;
+}
+
+.type-picker-close{
+  margin-top:14px;
+
+  width:100%;
+
+  height:48px;
+
+  border:none;
+
+  border-radius:14px;
+
+  background:#F5F5F5;
+}

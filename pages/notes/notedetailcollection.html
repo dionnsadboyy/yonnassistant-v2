@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
+body{background:#f5f6fb;max-width:430px;margin:auto}
+.header{padding:24px;background:white;position:sticky;top:0}
+.back{font-size:22px}
+.hero{
+padding:28px;
+background:linear-gradient(135deg,#f8ffe7,#ffffff);
+border-radius:0 0 32px 32px;
+}
+.hero h1{font-size:36px}
+.hero p{color:#888}
+.grid{
+padding:24px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
+.tag{
+padding:16px;
+border-radius:18px;
+font-weight:600;
+text-align:center;
+}
+.green{background:#dff5b7}
+.blue{background:#dfe7ff}
+.red{background:#f9dddd}
+.yellow{background:#f8ebbf}
+.section{padding:0 24px 24px}
+.card{
+background:white;
+border-radius:24px;
+padding:20px;
+box-shadow:0 8px 30px rgba(0,0,0,.05);
+}
+.list{margin-top:12px}
+.item{
+display:flex;
+justify-content:space-between;
+padding:14px 0;
+border-bottom:1px solid #f0f0f0;
+}
+.item:last-child{border:none}
+.fab{
+position:fixed;
+bottom:24px;
+right:24px;
+width:64px;
+height:64px;
+border-radius:50%;
+background:#6f5cff;
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:34px;
+}
+</style>
+</head>
+<body>
+<div class="header">← Shopping List</div>
+
+<div class="hero">
+<h1>4 Items</h1>
+<p>Weekly Grocery List</p>
+</div>
+
+<div class="grid">
+<div class="tag green">🥒 Cucumber</div>
+<div class="tag blue">🥣 Greek Yogurt</div>
+<div class="tag red">🌶 Chili</div>
+<div class="tag yellow">🥚 Eggs</div>
+</div>
+
+<div class="section">
+<div class="card">
+<h3>Shopping Checklist</h3>
+<div class="list">
+<div class="item"><span>Cucumber</span><span>2 pcs</span></div>
+<div class="item"><span>Greek Yogurt</span><span>1 pack</span></div>
+<div class="item"><span>Chili</span><span>250 gr</span></div>
+<div class="item"><span>Eggs</span><span>12 pcs</span></div>
+</div>
+</div>
+</div>
+
+<div class="fab">+</div>
+</body>
+</html>

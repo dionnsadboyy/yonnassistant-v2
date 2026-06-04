@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YonnAssistant - Notes</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0"
+    />
+
+    <link rel="stylesheet" href="notes.css" />
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  </head>
+
+  <body>
+    <div class="mobile-layout">
+      <main class="mobile-notes-page">
+        <header class="page-header">
+          <div>
+            <p class="page-label">Yonn Assistant</p>
+
+            <h1 id="mobileGreeting">Soreee, Yonn 👋</h1>
+          </div>
+
+          <button id="menuBtn" class="filter-btn" type="button">
+            <span class="material-symbols-rounded"> menu </span>
+          </button>
+        </header>
+
+        <div class="search">
+          <input
+            type="text"
+            id="mobileSearchInput"
+            placeholder="Cari catatan..."
+          />
+        </div>
+
+        <div class="menu-popup" id="menuPopup">
+          <button
+            class="menu-item"
+            onclick="location.href = '/pages/finance/home/home.html'"
+          >
+            <div class="menu-icon">🏠</div>
+            <span>Beranda</span>
+          </button>
+
+          <button
+            class="menu-item"
+            onclick="location.href = '/pages/yonngpt/chat.html'"
+          >
+            <div class="menu-icon">🤖</div>
+            <span>YonnGPT</span>
+          </button>
+
+          <button class="menu-item" onclick="location.href = 'notes.html'">
+            <div class="menu-icon">📝</div>
+            <span>Notes</span>
+          </button>
+        </div>
+
+        <div class="section">Catatan</div>
+
+        <div class="grid" id="mobileNotesGrid"></div>
+
+        <div class="music">
+          <div class="player">
+            <div class="play">✨</div>
+
+            <div>
+              <strong>Yonn Memory</strong>
+              <br />
+              Coming Soon
+            </div>
+          </div>
+
+          <p class="memory-desc">
+            AI akan membaca catatan penting, mengenali pola hidup, dan membantu
+            mengingat konteks yang pernah kamu tulis.
+          </p>
+        </div>
+
+        <div class="mobile-empty-state" id="mobileEmptyState">
+          <h3>Masih kosong nih.</h3>
+
+          <p>
+            Simpan ide random, overthinking, atau project jam 2 pagi lo di sini.
+          </p>
+        </div>
+
+        <button class="fab" id="mobileOpenModalBtn">+</button>
+      </main>
+    </div>
+
+    <!-- TYPE PICKER -->
+    <div class="type-picker" id="typePicker">
+      <div class="type-picker-backdrop" id="closeTypePicker"></div>
+
+      <div class="type-picker-sheet" role="dialog" aria-modal="true">
+        <div class="type-picker-drag"></div>
+
+        <div class="type-picker-row">
+          <button class="type-mini" data-note-type="note" type="button">
+            <span class="type-emoji">📝</span>
+            <small>Note</small>
+          </button>
+
+          <button class="type-mini" data-note-type="list" type="button">
+            <span class="type-emoji">☑</span>
+            <small>List</small>
+          </button>
+
+          <button class="type-mini" data-note-type="collection" type="button">
+            <span class="type-emoji">📚</span>
+            <small>Coll</small>
+          </button>
+        </div>
+
+        <button class="type-picker-close" id="closeTypePickerBtn" type="button">
+          ✕
+        </button>
+      </div>
+    </div>
+
+    <script src="notes.js"></script>
+  </body>
+</html>

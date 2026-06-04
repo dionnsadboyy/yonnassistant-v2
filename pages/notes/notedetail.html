@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Note Detail</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+    <link rel="stylesheet" href="notedetail.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0"
+    />
+  </head>
+
+  <body>
+    <div class="note-page">
+      <!-- HEADER -->
+
+      <div class="topbar">
+        <button class="icon-btn" onclick="history.back()">
+          <span class="material-symbols-rounded"> arrow_back </span>
+        </button>
+
+        <div class="top-actions">
+          <button class="icon-btn" id="editBtn">
+            <span class="material-symbols-rounded"> edit </span>
+          </button>
+
+          <button class="icon-btn danger" id="deleteBtn">
+            <span class="material-symbols-rounded"> delete </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- NOTE -->
+
+      <div class="note-card">
+        <span class="note-date" id="noteDate"> 03 Juni 2026 </span>
+
+        <input id="noteTitle" class="note-title-input" placeholder="Judul..." />
+
+        <textarea
+          id="noteContent"
+          class="note-content-input"
+          placeholder="Mulai menulis..."
+        ></textarea>
+      </div>
+
+      <!-- QUICK INFO -->
+
+      <div class="info-card">
+        <div class="info-row">
+          <span> Dibuat </span>
+
+          <strong> 03 Jun 2026 </strong>
+        </div>
+
+        <div class="info-row">
+          <span> Status </span>
+
+          <strong> Active </strong>
+        </div>
+      </div>
+    </div>
+    <script>
+      const note = JSON.parse(localStorage.getItem("selectedNote"));
+
+      if (note) {
+        document.getElementById("noteTitle").textContent = note.title;
+
+        document.getElementById("noteContent").textContent = note.content;
+
+        document.getElementById("noteDate").textContent = note.date;
+      }
+    </script>
+    <script src="notedetail.js"></script>
+  </body>
+</html>
