@@ -139,10 +139,23 @@ function detectAvatar(text) {
   return ICONS.analyzing;
 }
 /* =========================================================
-   API REQUEST
+   MEMORY CONTEXT
 ========================================================= */
 
+async function getMemoryContext() {
+  const { data, error } = await supabaseClient.from("user_memory").select("*");
+
+  if (error) {
+    console.error(error);
+    return "";
+  }
+
+  return data.map((m) => `[${m.category}] ${m.title}: ${m.content}`).join("\n");
+}
+
 async function askYonn(message) {
+  const memoryContext = await getMemoryContext();
+
   const response = await fetch(API_URL, {
     method: "POST",
 
@@ -152,6 +165,7 @@ async function askYonn(message) {
 
     body: JSON.stringify({
       message,
+      memory: memoryContext,
     }),
   });
 

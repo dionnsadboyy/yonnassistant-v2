@@ -98,6 +98,14 @@ async function answerNormal(question) {
       content: `
 Kamu adalah YonnGPT.
 
+Berikut informasi yang kamu ketahui tentang user:
+
+${memoryContext}
+
+Gunakan informasi di atas jika relevan.
+
+Jangan mengarang fakta baru.
+
 Jawab santai.
 Bahasa Indonesia.
 Fokus ke produktivitas, hidup, dan keuangan.

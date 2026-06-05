@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+
+    <title>Yonn Memory</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="memory.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <header class="hero">
+        <div class="hero-top">
+          <button class="back-btn" onclick="history.back()">
+            <span class="material-symbols-rounded"> arrow_back </span>
+          </button>
+        </div>
+
+        <div class="brain-icon">🧠</div>
+
+        <h1>Yonn Memory</h1>
+
+        <p>Hal yang perlu Yonn ingat tentang kamu.</p>
+
+        <div class="memory-counter">
+          <span id="memoryCount">0</span>
+          Memories Saved
+        </div>
+      </header>
+
+      <main>
+        <div class="memory-grid" id="memoryGrid"></div>
+
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon">🧠</div>
+
+          <h3>Belum ada memory</h3>
+
+          <p>Simpan hal penting agar Yonn semakin mengenal kamu.</p>
+        </div>
+      </main>
+
+      <button class="fab" id="openModalBtn">+</button>
+    </div>
+
+    <!-- MODAL -->
+
+    <div class="modal-overlay" id="memoryModal">
+      <div class="modal">
+        <h3>Tambah Memory</h3>
+
+        <select id="memoryCategory">
+          <option value="profile">👤 Profile</option>
+
+          <option value="schedule">🌙 Schedule</option>
+
+          <option value="goal">🎯 Goal</option>
+
+          <option value="habit">☕ Habit</option>
+
+          <option value="project">💻 Project</option>
+        </select>
+
+        <input type="text" id="memoryTitle" placeholder="Judul..." />
+
+        <textarea id="memoryContent" placeholder="Isi memory..."></textarea>
+
+        <div class="modal-actions">
+          <button id="cancelBtn">Batal</button>
+
+          <button id="saveBtn">Simpan</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="memory.js"></script>
+  </body>
+</html>

@@ -45,7 +45,16 @@ router.post("/chat", async (req, res) => {
     if (!needDatabase) {
       console.time("NORMAL_AI");
 
-      const answer = await answerNormal(message);
+      const { data: memories } = await supabase
+        .from("user_memory")
+        .select("*")
+        .order("created_at");
+
+      const memoryContext = (memories || [])
+        .map((m) => `[${m.category}] ${m.title}: ${m.content}`)
+        .join("\n");
+
+      const answer = await answerNormal(message, memoryContext);
 
       console.timeEnd("NORMAL_AI");
       console.timeEnd("TOTAL_REQUEST");
