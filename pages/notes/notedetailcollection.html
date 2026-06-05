@@ -1,95 +1,128 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
-body{background:#f5f6fb;max-width:430px;margin:auto}
-.header{padding:24px;background:white;position:sticky;top:0}
-.back{font-size:22px}
-.hero{
-padding:28px;
-background:linear-gradient(135deg,#f8ffe7,#ffffff);
-border-radius:0 0 32px 32px;
-}
-.hero h1{font-size:36px}
-.hero p{color:#888}
-.grid{
-padding:24px;
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-}
-.tag{
-padding:16px;
-border-radius:18px;
-font-weight:600;
-text-align:center;
-}
-.green{background:#dff5b7}
-.blue{background:#dfe7ff}
-.red{background:#f9dddd}
-.yellow{background:#f8ebbf}
-.section{padding:0 24px 24px}
-.card{
-background:white;
-border-radius:24px;
-padding:20px;
-box-shadow:0 8px 30px rgba(0,0,0,.05);
-}
-.list{margin-top:12px}
-.item{
-display:flex;
-justify-content:space-between;
-padding:14px 0;
-border-bottom:1px solid #f0f0f0;
-}
-.item:last-child{border:none}
-.fab{
-position:fixed;
-bottom:24px;
-right:24px;
-width:64px;
-height:64px;
-border-radius:50%;
-background:#6f5cff;
-color:white;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:34px;
-}
-</style>
-</head>
-<body>
-<div class="header">← Shopping List</div>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
 
-<div class="hero">
-<h1>4 Items</h1>
-<p>Weekly Grocery List</p>
-</div>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
 
-<div class="grid">
-<div class="tag green">🥒 Cucumber</div>
-<div class="tag blue">🥣 Greek Yogurt</div>
-<div class="tag red">🌶 Chili</div>
-<div class="tag yellow">🥚 Eggs</div>
-</div>
+    <title>Collection Detail</title>
 
-<div class="section">
-<div class="card">
-<h3>Shopping Checklist</h3>
-<div class="list">
-<div class="item"><span>Cucumber</span><span>2 pcs</span></div>
-<div class="item"><span>Greek Yogurt</span><span>1 pack</span></div>
-<div class="item"><span>Chili</span><span>250 gr</span></div>
-<div class="item"><span>Eggs</span><span>12 pcs</span></div>
-</div>
-</div>
-</div>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
 
-<div class="fab">+</div>
-</body>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0"
+    />
+
+    <link rel="stylesheet" href="notedetailcollection.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- HEADER -->
+
+      <div class="header">
+        <button class="icon-btn" onclick="history.back()">
+          <span class="material-symbols-rounded"> arrow_back </span>
+        </button>
+
+        <span class="header-title"> Collection Detail </span>
+      </div>
+
+      <!-- HERO -->
+
+      <div class="hero">
+        <input
+          type="text"
+          id="collectionTitle"
+          class="collection-title"
+          placeholder="Nama Collection..."
+        />
+
+        <p class="collection-subtitle">Personal Collection</p>
+
+        <div class="collection-counter">
+          <span id="totalItems">0</span>
+          Items
+        </div>
+      </div>
+
+      <!-- TAG GRID -->
+
+      <div id="collectionGrid" class="grid">
+        <!-- JS RENDER -->
+      </div>
+
+      <!-- ADD ITEM -->
+
+      <div class="add-section">
+        <button id="addItemBtn" class="add-item-btn">
+          <span class="material-symbols-rounded"> add </span>
+
+          Tambah Item
+        </button>
+      </div>
+
+      <!-- NOTES -->
+
+      <div class="section">
+        <div class="card">
+          <h3>Collection Notes</h3>
+
+          <textarea
+            id="collectionNotes"
+            class="collection-notes"
+            placeholder="Tambahkan catatan..."
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- INFO -->
+
+      <div class="section">
+        <div class="card">
+          <div class="info-row">
+            <span> Last Updated </span>
+
+            <strong id="updatedAt"> - </strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- FLOATING ACTIONS -->
+
+      <div class="floating-actions">
+        <button id="saveBtn" class="action-btn save-btn">
+          <span class="material-symbols-rounded"> save </span>
+        </button>
+
+        <button id="deleteBtn" class="action-btn delete-btn">
+          <span class="material-symbols-rounded"> delete </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- TEMPLATE ITEM -->
+
+    <template id="itemTemplate">
+      <div class="tag">
+        <input
+          type="text"
+          class="collection-item-input"
+          placeholder="Nama Item..."
+        />
+
+        <button class="remove-item-btn">×</button>
+      </div>
+    </template>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="notedetailcollection.js"></script>
+  </body>
 </html>

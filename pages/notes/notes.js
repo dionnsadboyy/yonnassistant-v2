@@ -2,9 +2,6 @@
    YONNASSISTANT NOTES SCRIPT
 ===================================================== */
 
-/* ==========================================
-   SUPABASE CONFIG
-========================================== */
 const SUPABASE_URL = "https://ibimfihvynrdjiqtsyrl.supabase.co";
 const SUPABASE_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImliaW1maWh2eW5yZGppcXRzeXJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwNTM5NzIsImV4cCI6MjA5NTYyOTk3Mn0.8iKoQgoBUrBiaK1CCuGJ14QhrIQV1CYV0f0GW6xvSTQ";
@@ -12,14 +9,6 @@ const SUPABASE_KEY =
 const supabaseClient = window.supabase
   ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
   : null;
-
-if (supabaseClient) {
-  (async () => {
-    const { data, error } = await supabaseClient.from("notes").select("*");
-    console.log("SUPABASE DATA:", data);
-    console.log("SUPABASE ERROR:", error);
-  })();
-}
 
 document.addEventListener("DOMContentLoaded", () => {
   if (!supabaseClient) {
@@ -37,13 +26,13 @@ document.addEventListener("DOMContentLoaded", () => {
   let greeting = "";
 
   if (hour >= 4 && hour < 11) {
-    greeting = "pagiiii, yonnnn 🌤️";
+    greeting = "pagii, yonn 🌤️";
   } else if (hour >= 11 && hour < 15) {
-    greeting = "sianggg, yonnnn ☀️";
+    greeting = "siangg, yonn ☀️";
   } else if (hour >= 15 && hour < 18) {
-    greeting = "soreee, yonnnn 👋";
+    greeting = "soree, yonn 👋";
   } else {
-    greeting = "maleeeeemmm, yonnnn 🌙";
+    greeting = "malemm, yonn 🌙";
   }
 
   if (greetingText) greetingText.textContent = greeting;
@@ -75,6 +64,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeTypePicker = document.querySelector("#closeTypePicker");
   const closeTypePickerBtn = document.querySelector("#closeTypePickerBtn");
   const typeCards = document.querySelectorAll("[data-note-type]");
+
+  const menuBtn = document.getElementById("menuBtn");
+  const menuPopup = document.getElementById("menuPopup");
 
   /* =====================================================
      STATE
@@ -139,6 +131,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
+  const escapeHTML = (value) =>
+    String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+
   /* =====================================================
      PICKER / MODAL
   ===================================================== */
@@ -191,29 +191,37 @@ document.addEventListener("DOMContentLoaded", () => {
      LOAD NOTES
   ===================================================== */
   const loadNotesFromSupabase = async () => {
-    const { data, error } = await supabaseClient
-      .from("notes")
-      .select("*")
-      .order("created_at", { ascending: false });
+    try {
+      const { data, error } = await supabaseClient
+        .from("notes")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-    if (error) {
-      console.error(error);
-      return;
+      if (error) {
+        console.error("SUPABASE ERROR:", error);
+        notes = [];
+        renderNotes();
+        return;
+      }
+
+      notes = (data || []).map((note) => ({
+        id: note.id,
+        title: note.title || "",
+        content: note.content || "",
+        type: normalizeType(note.type || "note"),
+        created_at: note.created_at || null,
+        updated_at: note.updated_at || null,
+        date: note.created_at
+          ? new Date(note.created_at).toLocaleDateString("id-ID")
+          : formatDate(),
+      }));
+
+      renderNotes();
+    } catch (err) {
+      console.error("LOAD NOTES ERROR:", err);
+      notes = [];
+      renderNotes();
     }
-
-    notes = (data || []).map((note) => ({
-      id: note.id,
-      title: note.title || "",
-      content: note.content || "",
-      type: normalizeType(note.type || "note"),
-      created_at: note.created_at || null,
-      updated_at: note.updated_at || null,
-      date: note.created_at
-        ? new Date(note.created_at).toLocaleDateString("id-ID")
-        : formatDate(),
-    }));
-
-    renderNotes();
   };
 
   /* =====================================================
@@ -243,17 +251,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     filteredNotes.forEach((note) => {
+      const preview = note.content.replace(/\n+/g, " ").trim();
+
       if (notesGrid) {
         const noteCard = document.createElement("div");
         noteCard.className = "card note-card";
 
         noteCard.innerHTML = `
-          <h3>${note.title}</h3>
+          <h3>${escapeHTML(note.title)}</h3>
           <div class="small">
             ${
-              note.content.length > 90
-                ? note.content.slice(0, 90) + "..."
-                : note.content
+              preview.length > 90
+                ? escapeHTML(preview.slice(0, 90)) + "..."
+                : escapeHTML(preview)
             }
           </div>
         `;
@@ -270,12 +280,12 @@ document.addEventListener("DOMContentLoaded", () => {
         mobileCard.className = "card mobile-note-card";
 
         mobileCard.innerHTML = `
-          <h3>${note.title}</h3>
+          <h3>${escapeHTML(note.title)}</h3>
           <div class="small">
             ${
-              note.content.length > 70
-                ? note.content.slice(0, 70) + "..."
-                : note.content
+              preview.length > 70
+                ? escapeHTML(preview.slice(0, 70)) + "..."
+                : escapeHTML(preview)
             }
           </div>
         `;
@@ -352,15 +362,22 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeCards && typeCards.length) {
     typeCards.forEach((card) => {
       card.addEventListener("click", () => {
-        const type = card.dataset.noteType;
+        const type = card.dataset.noteType || "note";
 
         localStorage.setItem("createMode", type);
+        localStorage.removeItem("selectedNote");
+        localStorage.removeItem("selectedNoteId");
 
         if (type === "note") {
           window.location.href = "notedetail.html";
         }
+
         if (type === "list") {
           window.location.href = "notedetaillist.html";
+        }
+
+        if (type === "collection") {
+          window.location.href = "notedetailcollection.html";
         }
       });
     });
@@ -391,21 +408,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  if (menuBtn && menuPopup) {
+    menuBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      menuPopup.classList.toggle("show");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!menuPopup.contains(e.target) && !menuBtn.contains(e.target)) {
+        menuPopup.classList.remove("show");
+      }
+    });
+  }
+
   /* =====================================================
      INITIAL LOAD
   ===================================================== */
   loadNotesFromSupabase();
-  const menuBtn = document.getElementById("menuBtn");
-
-  const menuPopup = document.getElementById("menuPopup");
-
-  menuBtn?.addEventListener("click", () => {
-    menuPopup.classList.toggle("show");
-  });
-
-  document.addEventListener("click", (e) => {
-    if (!menuPopup.contains(e.target) && !menuBtn.contains(e.target)) {
-      menuPopup.classList.remove("show");
-    }
-  });
 });

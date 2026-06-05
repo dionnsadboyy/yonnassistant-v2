@@ -1,5 +1,5 @@
 /* =====================================================
-   YONNASSISTANT NOTE DETAIL SCRIPT
+   YONNASSISTANT COLLECTION DETAIL SCRIPT
 ===================================================== */
 
 const SUPABASE_URL = "https://ibimfihvynrdjiqtsyrl.supabase.co";
@@ -16,13 +16,26 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  const noteTitleEl = document.getElementById("noteTitle");
-  const noteContentEl = document.getElementById("noteContent");
-  const noteDateEl = document.getElementById("noteDate");
-  const editBtn = document.getElementById("editBtn");
+  const collectionTitleEl = document.getElementById("collectionTitle");
+  const collectionGridEl = document.getElementById("collectionGrid");
+  const addItemBtn = document.getElementById("addItemBtn");
+  const collectionNotesEl = document.getElementById("collectionNotes");
+  const totalItemsEl = document.getElementById("totalItems");
+  const updatedAtEl = document.getElementById("updatedAt");
+  const saveBtn = document.getElementById("saveBtn");
   const deleteBtn = document.getElementById("deleteBtn");
+  const itemTemplateEl = document.getElementById("itemTemplate");
 
   let currentNote = null;
+
+  const COLORS = [
+    "#dff5b7",
+    "#dfe7ff",
+    "#f9dddd",
+    "#f8ebbf",
+    "#efe8ff",
+    "#dff3ff",
+  ];
 
   const formatDate = (value) => {
     if (!value) return "-";
@@ -72,46 +85,177 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  const renderListContent = (content) => {
-    const lines = String(content || "")
-      .split("\n")
-      .map((line) => line.trim())
+  const normalizeItem = (item) => {
+    if (typeof item === "string") return item.trim();
+    if (item && typeof item === "object") {
+      return String(item.text || item.label || "").trim();
+    }
+    return "";
+  };
+
+  const getItemsFromUI = () => {
+    return Array.from(
+      collectionGridEl.querySelectorAll(".collection-item-input"),
+    )
+      .map((input) => input.value.trim())
       .filter(Boolean);
+  };
 
-    if (!lines.length) return "-";
+  const buildContentSummary = (notesText, items) => {
+    const parts = [];
 
-    return `
-      <ul class="detail-list">
-        ${lines
-          .map((line) => `<li>${line.replace(/^[-*•]\s*/, "")}</li>`)
-          .join("")}
-      </ul>
+    if (notesText && notesText.trim()) {
+      parts.push(notesText.trim());
+    }
+
+    items.forEach((item) => {
+      if (item) parts.push(item);
+    });
+
+    return parts.join("\n");
+  };
+
+  const updateCounter = () => {
+    const items = getItemsFromUI();
+
+    if (totalItemsEl) {
+      totalItemsEl.textContent = String(items.length);
+    }
+  };
+
+  const makeItemElement = (value = "", color = COLORS[0]) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "tag";
+    wrapper.style.background = color;
+
+    wrapper.innerHTML = `
+      <input
+        type="text"
+        class="collection-item-input"
+        placeholder="Nama Item..."
+        value="${String(value).replaceAll('"', "&quot;")}"
+      />
+      <button class="remove-item-btn" type="button">×</button>
     `;
+
+    const input = wrapper.querySelector(".collection-item-input");
+    const removeBtn = wrapper.querySelector(".remove-item-btn");
+
+    if (input) {
+      input.addEventListener("input", updateCounter);
+
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          addCollectionItem("");
+        }
+      });
+    }
+
+    if (removeBtn) {
+      removeBtn.addEventListener("click", () => {
+        wrapper.remove();
+
+        if (!collectionGridEl.querySelector(".collection-item-input")) {
+          addCollectionItem("");
+        }
+
+        updateCounter();
+      });
+    }
+
+    return wrapper;
+  };
+
+  const addCollectionItem = (value = "") => {
+    const index = collectionGridEl.querySelectorAll(".tag").length;
+    const color = COLORS[index % COLORS.length];
+    const itemEl = makeItemElement(value, color);
+
+    collectionGridEl.appendChild(itemEl);
+
+    const input = itemEl.querySelector(".collection-item-input");
+    if (input) {
+      input.focus();
+      input.setSelectionRange(input.value.length, input.value.length);
+    }
+
+    updateCounter();
+  };
+
+  const renderItems = (items = []) => {
+    collectionGridEl.innerHTML = "";
+
+    const normalizedItems = items.map(normalizeItem).filter(Boolean);
+
+    if (!normalizedItems.length) {
+      addCollectionItem("");
+      return;
+    }
+
+    normalizedItems.forEach((item, index) => {
+      const color = COLORS[index % COLORS.length];
+      const itemEl = makeItemElement(item, color);
+      collectionGridEl.appendChild(itemEl);
+    });
+
+    updateCounter();
   };
 
   const renderNote = (note) => {
     if (!note) return;
 
-    const type = normalizeType(note.type);
+    document.title = note.title
+      ? `${note.title} - Collection Detail`
+      : "Collection Detail";
 
-    document.title = note.title ? `${note.title} - Note Detail` : "Note Detail";
-
-    if (noteTitleEl) noteTitleEl.textContent = note.title || "-";
-    if (noteDateEl) {
-      noteDateEl.textContent = formatDate(note.created_at || note.date);
+    if (collectionTitleEl) {
+      collectionTitleEl.value = note.title || "";
     }
 
-    if (noteContentEl) {
-      if (type === "list" || type === "collection") {
-        noteContentEl.innerHTML = renderListContent(note.content);
-      } else {
-        noteContentEl.textContent = note.content || "-";
-      }
+    const metadata = note.metadata || {};
+    const items =
+      Array.isArray(metadata.items) && metadata.items.length
+        ? metadata.items
+        : String(note.content || "")
+            .split("\n")
+            .map((line) => line.trim())
+            .filter(Boolean);
+
+    renderItems(items);
+
+    if (collectionNotesEl) {
+      collectionNotesEl.value = metadata.notes || "";
+    }
+
+    if (updatedAtEl) {
+      updatedAtEl.textContent = formatDate(
+        note.updated_at || note.created_at || note.date,
+      );
     }
   };
 
+  const resetCreateState = () => {
+    currentNote = null;
+
+    if (collectionTitleEl) collectionTitleEl.value = "";
+    if (collectionNotesEl) collectionNotesEl.value = "";
+    if (updatedAtEl) updatedAtEl.textContent = "-";
+
+    renderItems([]);
+  };
+
   const loadNote = async () => {
+    const createMode = localStorage.getItem("createMode");
     const noteId = getNoteIdFromStorage();
+
+    if (createMode === "collection") {
+      localStorage.removeItem("selectedNote");
+      localStorage.removeItem("selectedNoteId");
+      currentNote = null;
+      resetCreateState();
+      return;
+    }
 
     if (noteId) {
       const { data, error } = await supabaseClient
@@ -137,65 +281,96 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    alert("Note tidak ditemukan.");
-    history.back();
+    resetCreateState();
   };
 
-  const refreshCurrentNote = async () => {
-    if (!currentNote?.id) {
-      await loadNote();
+  const createCollection = async () => {
+    const title = collectionTitleEl.value.trim();
+    const notesText = collectionNotesEl.value.trim();
+    const items = getItemsFromUI();
+
+    if (!title) {
+      alert("Isi judul collection dulu.");
       return;
     }
 
-    const { data, error } = await supabaseClient
-      .from("notes")
-      .select("*")
-      .eq("id", currentNote.id)
-      .single();
+    const { error } = await supabaseClient.from("notes").insert([
+      {
+        title,
+        content: buildContentSummary(notesText, items),
+        type: "collection",
+        metadata: {
+          items,
+          notes: notesText,
+        },
+      },
+    ]);
 
-    if (error || !data) {
-      console.error(error);
-      await loadNote();
+    if (error) {
+      console.error("CREATE ERROR:", error);
+      alert("Gagal membuat collection.");
       return;
     }
 
-    currentNote = data;
-    renderNote(data);
+    localStorage.removeItem("createMode");
+    localStorage.removeItem("selectedNote");
+    localStorage.removeItem("selectedNoteId");
+
+    alert("Collection berhasil dibuat.");
+    window.location.href = "notes.html";
   };
 
-  const updateCurrentNote = async () => {
+  const updateCollection = async () => {
     if (!currentNote?.id) return;
 
-    const nextTitle = prompt("Edit judul:", currentNote.title || "");
-    if (nextTitle === null) return;
+    const title = collectionTitleEl.value.trim();
+    const notesText = collectionNotesEl.value.trim();
+    const items = getItemsFromUI();
 
-    const nextContent = prompt("Edit isi:", currentNote.content || "");
-    if (nextContent === null) return;
+    if (!title) {
+      alert("Isi judul collection dulu.");
+      return;
+    }
 
     const { error } = await supabaseClient
       .from("notes")
       .update({
-        title: nextTitle.trim(),
-        content: nextContent.trim(),
+        title,
+        content: buildContentSummary(notesText, items),
+        metadata: {
+          items,
+          notes: notesText,
+        },
         updated_at: new Date().toISOString(),
       })
       .eq("id", currentNote.id);
 
     if (error) {
       console.error("UPDATE ERROR:", error);
-      alert("Gagal update note.");
+      alert("Gagal update collection.");
       return;
     }
 
-    await refreshCurrentNote();
-    alert("Note berhasil diupdate.");
+    localStorage.removeItem("createMode");
+
+    alert("Collection berhasil diupdate.");
+    window.location.href = "notes.html";
   };
 
-  const deleteCurrentNote = async () => {
-    if (!currentNote?.id) return;
+  const deleteCollection = async () => {
+    if (!currentNote?.id) {
+      const cancelDraft = confirm("Batalkan collection baru ini?");
+      if (!cancelDraft) return;
 
-    const confirmDelete = confirm(`Hapus "${currentNote.title}" ?`);
-    if (!confirmDelete) return;
+      localStorage.removeItem("createMode");
+      localStorage.removeItem("selectedNote");
+      localStorage.removeItem("selectedNoteId");
+      window.location.href = "notes.html";
+      return;
+    }
+
+    const confirmed = confirm(`Hapus "${currentNote.title}" ?`);
+    if (!confirmed) return;
 
     const { error } = await supabaseClient
       .from("notes")
@@ -204,23 +379,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (error) {
       console.error("DELETE ERROR:", error);
-      alert("Gagal hapus note.");
+      alert("Gagal hapus collection.");
       return;
     }
 
     localStorage.removeItem("selectedNote");
     localStorage.removeItem("selectedNoteId");
+    localStorage.removeItem("createMode");
 
-    alert("Note berhasil dihapus.");
+    alert("Collection berhasil dihapus.");
     window.location.href = "notes.html";
   };
 
-  if (editBtn) {
-    editBtn.addEventListener("click", updateCurrentNote);
+  if (addItemBtn) {
+    addItemBtn.addEventListener("click", () => {
+      addCollectionItem("");
+    });
+  }
+
+  if (saveBtn) {
+    saveBtn.addEventListener("click", async () => {
+      if (currentNote?.id) {
+        await updateCollection();
+        return;
+      }
+
+      await createCollection();
+    });
   }
 
   if (deleteBtn) {
-    deleteBtn.addEventListener("click", deleteCurrentNote);
+    deleteBtn.addEventListener("click", deleteCollection);
   }
 
   loadNote();
