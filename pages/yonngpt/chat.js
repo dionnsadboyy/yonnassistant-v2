@@ -28,6 +28,36 @@ const ICONS = {
 };
 
 /* =========================================================
+   CHAT HISTORY
+========================================================= */
+
+const CHAT_STORAGE_KEY = "yonn_chat_history";
+
+function getChatHistory() {
+  return JSON.parse(localStorage.getItem(CHAT_STORAGE_KEY) || "[]");
+}
+
+function saveChatHistory(history) {
+  localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(history));
+}
+
+function addHistory(role, content) {
+  const history = getChatHistory();
+
+  history.push({
+    role,
+    content,
+    time: Date.now(),
+  });
+
+  if (history.length > 30) {
+    history.shift();
+  }
+
+  saveChatHistory(history);
+}
+
+/* =========================================================
    HELPERS
 ========================================================= */
 
@@ -166,6 +196,7 @@ async function askYonn(message) {
     body: JSON.stringify({
       message,
       memory: memoryContext,
+      history: getChatHistory(),
     }),
   });
 
@@ -192,29 +223,34 @@ async function sendMessage(customText = null) {
   if (!text) return;
 
   addUserMessage(text);
+  addHistory("user", text);
 
   input.value = "";
 
   const thinking = addThinkingMessage();
 
+  let answer = "";
+
   try {
     const result = await askYonn(text);
 
-    const answer = result.answer || "Tidak ada jawaban.";
+    answer = result.answer || "tidak ada jawaban.";
 
     const avatar = detectAvatar(answer);
 
     updateBotMessage(thinking, answer, avatar);
+
+    addHistory("assistant", answer);
   } catch (error) {
     console.error(error);
 
-    updateBotMessage(
-      thinking,
-      `Yonn lagi ada masalah 😅
+    answer = `yonn lagi ada masalah 😅
 
-${error.message}`,
-      ICONS.surprised,
-    );
+${error.message}`;
+
+    updateBotMessage(thinking, answer, ICONS.surprised);
+
+    addHistory("assistant", answer);
   }
 }
 /* =========================================================
@@ -240,7 +276,23 @@ quickButtons.forEach((btn) => {
 /* =========================================================
    INIT
 ========================================================= */
+function renderSavedHistory() {
+  const history = getChatHistory();
 
+  history.forEach((item) => {
+    if (item.role === "user") {
+      addUserMessage(item.content);
+    } else {
+      const div = document.createElement("div");
+
+      div.className = "bot-message";
+
+      updateBotMessage(div, item.content, detectAvatar(item.content));
+
+      messages.appendChild(div);
+    }
+  });
+}
 window.addEventListener("load", () => {
   setTimeout(() => {
     scrollBottom();
@@ -248,3 +300,8 @@ window.addEventListener("load", () => {
 
   console.log("🔥 YonnGPT V4 Ready");
 });
+window.clearYonnChat = function () {
+  localStorage.removeItem(CHAT_STORAGE_KEY);
+
+  location.reload();
+};

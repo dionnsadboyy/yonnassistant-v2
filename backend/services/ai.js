@@ -1179,7 +1179,7 @@ ${normalizeSpaces(question)}
   }
 }
 
-async function answerNormal(question, memoryInput = []) {
+async function answerNormal(question, memoryInput = [], history = []) {
   const timeInfo = getTimeContext();
   const intent = detectIntent(question);
   const memoryPrompt = buildMemoryPrompt(

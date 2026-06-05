@@ -65,7 +65,8 @@ router.post("/chat", async (req, res) => {
   console.time("TOTAL_REQUEST");
 
   try {
-    const { message } = req.body || {};
+    // const { message } = req.body || {};
+    const { message, history = [] } = req.body || {};
     const cleanMessage = String(message || "").trim();
 
     if (!cleanMessage) {
@@ -93,7 +94,7 @@ router.post("/chat", async (req, res) => {
     if (!needDatabase) {
       console.time("NORMAL_AI");
 
-      const answer = await answerNormal(cleanMessage, memories);
+      const answer = await answerNormal(cleanMessage, memories, history);
 
       console.timeEnd("NORMAL_AI");
       console.timeEnd("TOTAL_REQUEST");
@@ -129,7 +130,12 @@ router.post("/chat", async (req, res) => {
 
     console.time("DATABASE_AI");
 
-    const answer = await answerWithDatabase(cleanMessage, data || [], memories);
+    const answer = await answerWithDatabase(
+      cleanMessage,
+      data || [],
+      memories,
+      history,
+    );
 
     console.timeEnd("DATABASE_AI");
     console.timeEnd("TOTAL_REQUEST");
