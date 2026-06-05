@@ -91,7 +91,7 @@ ${question}
   }
 }
 
-async function answerNormal(question) {
+async function answerNormal(question, memoryContext = "") {
   return await callGPT([
     {
       role: "system",
