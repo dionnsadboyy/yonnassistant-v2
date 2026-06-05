@@ -287,13 +287,15 @@ function renderSavedHistory() {
 
       div.className = "bot-message";
 
-      updateBotMessage(div, item.content, detectAvatar(item.content));
-
       messages.appendChild(div);
+
+      updateBotMessage(div, item.content, detectAvatar(item.content));
     }
   });
 }
 window.addEventListener("load", () => {
+  renderSavedHistory();
+
   setTimeout(() => {
     scrollBottom();
   }, 300);
