@@ -329,7 +329,7 @@ body{
   position:fixed;
 
   right:24px;
-  bottom:24px;
+  bottom:40px;
 
   display:flex;
   flex-direction:column;
@@ -383,6 +383,9 @@ body{
   .section{
     padding:16px;
   }
+  .section:last-child{
+  margin-bottom:120px;
+}
 
   .hero{
     padding:24px;

@@ -45,7 +45,8 @@ const state = {
   walletId: 1,
   categoryId: null,
   type: "expense",
-  transactionDate: new Date().toISOString().split("T")[0],
+  // transactionDate: new Date().toISOString().split("T")[0],
+  transactionDate: new Date().toLocaleDateString("en-CA"),
 };
 
 // ======================
