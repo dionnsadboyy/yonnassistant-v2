@@ -48,6 +48,7 @@ router.post("/chat", async (req, res) => {
       const { data: memories } = await supabase
         .from("user_memory")
         .select("*")
+        .eq("pinned", true)
         .order("created_at");
 
       const memoryContext = (memories || [])
