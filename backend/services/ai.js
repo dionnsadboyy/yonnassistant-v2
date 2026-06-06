@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const API_URL = "https://core.snifoxai.com/v1/chat/completions";
-const MODEL = "openai/GPT-5-mini";
+const MODEL = "openai/openai/gpt-5";
 const DEFAULT_TIMEZONE = "Asia/Jakarta";
 
 const MAX_MEMORY_LINES = 60;
@@ -125,52 +125,6 @@ function getJakartaNow() {
     timeShort,
     currentTime,
     iso: now.toISOString(),
-  };
-}
-
-function getTimeContext() {
-  const { hour, dayName, currentTime, timeShort } = getJakartaNow();
-
-  let phase = "netral";
-  let energy = "normal";
-  let hint = "konteks waktu netral.";
-
-  if (hour >= 4 && hour < 7) {
-    phase = "pagi buta";
-    energy = "siap-siap";
-    hint = "dion kemungkinan lagi mau cabut kerja shift pagi atau baru bangun.";
-  } else if (hour >= 7 && hour < 11) {
-    phase = "pagi kerja";
-    energy = "fokus kerja";
-    hint =
-      "dion kemungkinan lagi kerja shift pagi, jadi jangan ajak ngoding berat.";
-  } else if (hour >= 11 && hour < 16) {
-    phase = "siang-sore kerja";
-    energy = "capek kerja";
-    hint = "dion kemungkinan lagi kerja atau lagi capek kerja.";
-  } else if (hour >= 16 && hour < 19) {
-    phase = "sore siap berangkat";
-    energy = "siap berangkat";
-    hint =
-      "dion kemungkinan lagi siap-siap berangkat shift malam. prioritas: mandi, makan, siap cabut.";
-  } else if (hour >= 19 && hour < 23) {
-    phase = "malam kerja";
-    energy = "kerja malam";
-    hint = "dion kemungkinan lagi shift malam atau baru mulai kerja malam.";
-  } else {
-    phase = "larut / dini hari";
-    energy = "istirahat";
-    hint = "dion kemungkinan lagi istirahat, pulang kerja, atau mau tidur.";
-  }
-
-  return {
-    hour,
-    dayName,
-    timeShort,
-    currentTime,
-    phase,
-    energy,
-    hint,
   };
 }
 
@@ -877,36 +831,39 @@ function buildRelevantActionHint(question, timeInfo, intent) {
   const q = normalizeKey(question);
 
   if (intent.upgradeQuery) {
-    return "kalau user nanya apakah script perlu di-upgrade, jawab singkat bahwa versi ini sudah maksimal untuk v2 dan belum perlu upgrade besar dulu.";
+    return `
+user sedang membahas pengembangan aplikasi.
+
+jawab seperti partner coding.
+
+fokus ke solusi, langkah berikutnya,
+tradeoff, dan keputusan teknis.
+
+jangan jadi customer service.
+`;
   }
 
   if (intent.identityQuery) {
-    return "kalau user nanya siapa dirinya, jawab identitas inti secara singkat, padat, dan natural.";
+    return `
+kalau user nanya siapa dirinya,
+jawab berdasarkan memory yang ada.
+
+jangan cuma list data.
+
+buat terasa personal dan hidup.
+`;
   }
 
   if (intent.financeQuery) {
-    return "kalau pembahasan tentang uang, jadikan konteks keuangan lebih relevan, tapi jangan ngarang angka.";
-  }
-
-  if (timeInfo.phase === "sore siap berangkat") {
     return `
-  cek dulu percakapan terakhir.
+kalau pembahasan tentang uang,
+gunakan konteks finansial user.
 
-  kalau user sudah mandi,
-  jangan tanya mandi.
+jangan mengarang angka.
 
-  kalau user sudah makan,
-  jangan tanya makan.
-
-  kalau user sudah di kerjaan,
-  jangan tanya berangkat.
-
-  gunakan konteks terbaru.
-  `;
-  }
-
-  if (timeInfo.phase === "pagi buta") {
-    return "karena ini fase siap cabut kerja shift pagi, utamakan kesiapan berangkat dan semangat singkat.";
+kalau data tidak ada,
+bilang tidak tahu.
+`;
   }
 
   if (
@@ -914,21 +871,72 @@ function buildRelevantActionHint(question, timeInfo, intent) {
     timeInfo.phase === "siang-sore kerja" ||
     timeInfo.phase === "malam kerja"
   ) {
-    return "karena user sedang kerja atau capek kerja, fokus ke support ringan, kondisi badan, makan, mandi, istirahat, atau semangat singkat.";
+    return `
+user kemungkinan sedang kerja.
+
+jangan mengulang pertanyaan
+yang sudah terjawab.
+
+jangan menanyakan:
+- sudah mandi?
+- sudah makan?
+- sudah berangkat?
+
+jika informasi tersebut
+sudah muncul di chat.
+
+prioritas:
+- ngobrol natural
+- respon konteks terbaru
+- komentar situasi user
+- bercanda ringan bila cocok
+`;
   }
 
-  if (
-    intent.projectQuery &&
-    (timeInfo.phase === "larut / dini hari" || timeInfo.phase === "netral")
-  ) {
-    return "kalau konteks free time, baru boleh masuk ke project, coding, excel, atau planning.";
+  if (intent.projectQuery) {
+    return `
+user sedang membahas project.
+
+masuk ke mode partner ngoding.
+
+boleh kasih kritik,
+saran,
+atau ide baru.
+
+jangan terlalu formal.
+`;
   }
 
-  if (/halo|hai|hallo|woy|oy|bro|cs/.test(q)) {
-    return "kalau user cuma nyapa, jangan balas generik; langsung masuk ke konteks waktu atau kondisi user.";
+  if (/halo|hai|hallo|woy|oy|bro|cs|kiw/.test(q)) {
+    return `
+kalau user cuma nyapa,
+jangan jadi npc.
+
+hindari:
+"ada yang bisa saya bantu?"
+
+lebih baik:
+- komentar situasi user
+- komentar project
+- komentar kerjaan
+- lempar topik baru
+`;
   }
 
-  return "balas natural dan adaptif terhadap konteks.";
+  return `
+gunakan konteks percakapan terbaru
+sebagai sumber kebenaran utama.
+
+jangan mengasumsikan kondisi user.
+
+jangan mengulang pertanyaan
+yang jawabannya sudah diketahui.
+
+fokus menjaga alur obrolan.
+
+jadilah teman ngobrol,
+bukan customer service.
+`;
 }
 
 function buildStyleExamples() {
@@ -993,27 +1001,27 @@ function buildFewShotExamples() {
   return `
 contoh 1:
 user: "halo"
-assistant: "woy bro, lagi apa?"
+assistant: "woy bro, lagi ngapain?"
 
 contoh 2:
-user: "jam 17:38 nih"
-assistant: "woy, bentar lagi cabut ya? udah siap berangkat belum?"
+user: "lagi di line nih"
+assistant: "wkwk berarti lagi nunggu bel ya. line lu rame apa santai hari ini?"
 
 contoh 3:
-user: "udah mandi belum?"
-assistant: "belum nih? kalau belum gas mandi dulu biar gak mepet."
+user: "capek anjir"
+assistant: "iya sih. apalagi abis shift. hari ini apaan yang paling bikin capek?"
 
 contoh 4:
-user: "capek"
-assistant: "iya bro, habis shift emang nguras. makan dulu aja kalau sempet."
+user: "siapa gue?"
+assistant: "lu dion. operator denso yang lagi bangun yonngpt sambil berusaha ngerapihin hidup pelan-pelan."
 
 contoh 5:
-user: "siapa gue?"
-assistant: "lu dion. kerja di denso, tinggal di kos jatiwangi, dan lagi bangun yonngpt."
+user: "ada yang perlu di upgrade ga?"
+assistant: "buat sekarang engga banyak. yang paling kerasa justru personality sama history chat."
 
 contoh 6:
-user: "ada yang perlu di upgrade gak?"
-assistant: "nggak ada yang perlu di-upgrade besar dulu. ini udah maksimal buat v2."
+user: "bosen"
+assistant: "anjir baru berapa jam kerja udah bosen 😭"
 `.trim();
 }
 
@@ -1028,18 +1036,6 @@ function buildResponseModeHint(intent, timeInfo) {
 
   if (intent.identityQuery) {
     hints.push("jawab identitas user secara singkat, padat, dan natural.");
-  }
-
-  if (intent.greetingOnly && timeInfo.phase === "sore siap berangkat") {
-    hints.push(
-      "karena ini jam siap berangkat shift malam, utamakan nanya kesiapan berangkat.",
-    );
-  }
-
-  if (intent.greetingOnly && timeInfo.phase === "pagi buta") {
-    hints.push(
-      "karena ini jam mau cabut shift pagi, utamakan kesiapan berangkat.",
-    );
   }
 
   if (intent.workQuery) {
@@ -1231,7 +1227,8 @@ fase waktu:
 ${timeInfo.phase}
 
 konteks waktu:
-${timeInfo.hint}
+gunakan hanya sebagai referensi ringan.
+jangan menganggap kondisi user berdasarkan jam.
 
 memory dion:
 ${memoryPrompt}
