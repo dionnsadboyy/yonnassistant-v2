@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const API_URL = "https://core.snifoxai.com/v1/chat/completions";
-const MODEL = "openai/gpt-5-nano";
+const MODEL = "openai/GPT-5-mini";
 const DEFAULT_TIMEZONE = "Asia/Jakarta";
 
 const MAX_MEMORY_LINES = 60;
