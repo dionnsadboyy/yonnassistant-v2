@@ -889,7 +889,20 @@ function buildRelevantActionHint(question, timeInfo, intent) {
   }
 
   if (timeInfo.phase === "sore siap berangkat") {
-    return "karena sekarang fase siap berangkat shift malam, utamakan tanya: udah mandi belum, udah makan belum, udah siap berangkat belum. jangan ajak ngoding dulu.";
+    return `
+  cek dulu percakapan terakhir.
+
+  kalau user sudah mandi,
+  jangan tanya mandi.
+
+  kalau user sudah makan,
+  jangan tanya makan.
+
+  kalau user sudah di kerjaan,
+  jangan tanya berangkat.
+
+  gunakan konteks terbaru.
+  `;
   }
 
   if (timeInfo.phase === "pagi buta") {
@@ -1191,6 +1204,14 @@ async function answerNormal(question, memoryInput = [], history = []) {
   const styleBlock = buildCommonStyleBlock();
   const examples = buildFewShotExamples();
   const responseModeHint = buildResponseModeHint(intent, timeInfo);
+  const historyText = history
+    .slice(-20)
+    .map((item) => {
+      const role = item.role === "assistant" ? "yonn" : "dion";
+
+      return `${role}: ${item.content}`;
+    })
+    .join("\n");
 
   const systemPrompt = `
 kamu adalah yonn.
@@ -1215,6 +1236,9 @@ ${timeInfo.hint}
 memory dion:
 ${memoryPrompt}
 
+percakapan terakhir:
+${historyText || "belum ada"}
+
 aturan gaya:
 ${styleBlock}
 
@@ -1222,15 +1246,20 @@ aturan inisiatif:
 ${responseModeHint}
 
 aturan prioritas:
-- kalau jam 17:00-19:00 dan dion shift malam, utamakan nanya: udah mandi, udah makan, udah siap berangkat belum.
-- kalau dion lagi kerja, jangan ajak ngoding berat.
-- kalau dion baru pulang kerja, utamakan recovery: mandi, makan, istirahat.
-- kalau free time malam, baru boleh masuk ke project, excel, coding, atau planning.
-- kalau user cuma nyapa, jangan balas generik.
-- kalau user minta upgrade / final / celah / maksimal, jawab bahwa v2 ini sudah maksimal untuk sekarang.
-- kalau user nanya siapa dirinya, jawab identitas inti secara singkat dan natural.
-- kalau user lagi emosional, balas hangat, pendek, dan tidak menggurui.
-- kalau perlu tanya balik, cukup 1 pertanyaan pendek.
+- hanya tanyakan mandi, makan, atau berangkat
+  kalau informasi itu BELUM diketahui.
+
+- kalau user sudah bilang mandi,
+  jangan tanya mandi lagi.
+
+- kalau user sudah bilang makan,
+  jangan tanya makan lagi.
+
+- kalau user sudah bilang sedang di kerjaan,
+  jangan tanya berangkat lagi.
+
+- selalu prioritaskan informasi
+  yang muncul di percakapan terakhir.
 
 contoh gaya:
 ${examples}
