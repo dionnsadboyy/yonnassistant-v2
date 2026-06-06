@@ -1187,6 +1187,12 @@ ${normalizeSpaces(question)}
     };
   }
 }
+function getTimeContext() {
+  return {
+    phase: "netral",
+    hour: new Date().getHours(),
+  };
+}
 
 async function answerNormal(question, memoryInput = [], history = []) {
   const timeInfo = getTimeContext();
