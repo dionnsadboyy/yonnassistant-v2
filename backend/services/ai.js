@@ -1052,9 +1052,11 @@ async function callGPT(messages, options = {}) {
       const data = await response.json().catch(() => null);
 
       if (!response.ok) {
+        console.log("SNIFOX ERROR:", data);
+
         throw new Error(
           data?.error?.message ||
-            data?.error ||
+            JSON.stringify(data) ||
             `Snifox HTTP ${response.status}`,
         );
       }
@@ -1160,7 +1162,7 @@ async function answerNormal(question, memoryInput = [], history = []) {
   const examples = conversationRules;
   const responseModeHint = buildResponseModeHint(intent, timeInfo);
   const historyText = history
-    .slice(-20)
+    .slice(-10)
     .map((item) => {
       const role = item.role === "assistant" ? "yonn" : "dion";
 
