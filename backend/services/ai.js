@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const API_URL = "https://core.snifoxai.com/v1/chat/completions";
 // const MODEL = "openai/gpt-5.5";
-const CHAT_MODEL = "openai/gpt-5.5-nano";
+const CHAT_MODEL = "openai/gpt-5-nano";
 const ROUTER_MODEL = "openai/gpt-5-nano";
 const DEFAULT_TIMEZONE = "Asia/Jakarta";
 
