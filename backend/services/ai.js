@@ -2,6 +2,8 @@ require("dotenv").config();
 
 const API_URL = "https://core.snifoxai.com/v1/chat/completions";
 const MODEL = "openai/gpt-5.5";
+const CHAT_MODEL = "openai/gpt-5.5";
+const ROUTER_MODEL = "openai/gpt-5-nano";
 const DEFAULT_TIMEZONE = "Asia/Jakarta";
 
 const MAX_MEMORY_LINES = 60;
@@ -1011,7 +1013,8 @@ function buildResponseModeHint(intent, timeInfo) {
     : "- balas natural dan adaptif.";
 }
 
-async function callGPT(messages, options = {}) {
+// async function callGPT(messages, options = {}) {
+async function callGPT(messages, model = CHAT_MODEL, options = {}) {
   console.time("SNIFOX_API");
   ensureApiKey();
 
@@ -1038,7 +1041,7 @@ async function callGPT(messages, options = {}) {
         },
         signal: controller.signal,
         body: JSON.stringify({
-          model: MODEL,
+          model,
           messages,
           temperature,
           top_p,
@@ -1117,6 +1120,7 @@ ${normalizeSpaces(question)}
         content: prompt,
       },
     ],
+    ROUTER_MODEL,
     {
       temperature: 0.1,
       presence_penalty: 0,
@@ -1220,6 +1224,7 @@ aturan penting:
         content: normalizeSpaces(question),
       },
     ],
+    CHAT_MODEL,
     {
       temperature: 0.88,
       top_p: 0.95,
@@ -1275,29 +1280,30 @@ aturan:
 `.trim();
 
   return await callGPT(
-    [
-      {
-        role: "system",
-        content: systemPrompt,
-      },
-      {
-        role: "user",
-        content: `
+  [
+    {
+      role: "system",
+      content: systemPrompt,
+    },
+    {
+      role: "user",
+      content: `
 pertanyaan:
 ${normalizeSpaces(question)}
 
 database:
 ${JSON.stringify(databaseData, null, 2)}
 `.trim(),
-      },
-    ],
-    {
-      temperature: 0.35,
-      top_p: 0.9,
-      presence_penalty: 0.05,
-      frequency_penalty: 0.15,
     },
-  );
+  ],
+  CHAT_MODEL,
+  {
+    temperature: 0.35,
+    top_p: 0.9,
+    presence_penalty: 0.05,
+    frequency_penalty: 0.15,
+  },
+);
 }
 
 module.exports = {
