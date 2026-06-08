@@ -1,8 +1,8 @@
 require("dotenv").config();
 
 const API_URL = "https://core.snifoxai.com/v1/chat/completions";
-const MODEL = "openai/gpt-5.5";
-const CHAT_MODEL = "openai/gpt-5.5";
+// const MODEL = "openai/gpt-5.5";
+const CHAT_MODEL = "openai/gpt-5.5-nano";
 const ROUTER_MODEL = "openai/gpt-5-nano";
 const DEFAULT_TIMEZONE = "Asia/Jakarta";
 
@@ -1280,30 +1280,30 @@ aturan:
 `.trim();
 
   return await callGPT(
-  [
-    {
-      role: "system",
-      content: systemPrompt,
-    },
-    {
-      role: "user",
-      content: `
+    [
+      {
+        role: "system",
+        content: systemPrompt,
+      },
+      {
+        role: "user",
+        content: `
 pertanyaan:
 ${normalizeSpaces(question)}
 
 database:
 ${JSON.stringify(databaseData, null, 2)}
 `.trim(),
+      },
+    ],
+    CHAT_MODEL,
+    {
+      temperature: 0.35,
+      top_p: 0.9,
+      presence_penalty: 0.05,
+      frequency_penalty: 0.15,
     },
-  ],
-  CHAT_MODEL,
-  {
-    temperature: 0.35,
-    top_p: 0.9,
-    presence_penalty: 0.05,
-    frequency_penalty: 0.15,
-  },
-);
+  );
 }
 
 module.exports = {
