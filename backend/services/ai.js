@@ -1,8 +1,7 @@
 require("dotenv").config();
 
-const API_URL = "https://core.snifoxai.com/v1/chat/completions";
-// const MODEL = "openai/gpt-5.5";
-const CHAT_MODEL = "openai/gpt-5-nano";
+const API_URL = "https://api.koboillm.com/v1/chat/completions";
+const CHAT_MODEL = "openai/gpt-5.1";
 const ROUTER_MODEL = "openai/gpt-5-nano";
 const DEFAULT_TIMEZONE = "Asia/Jakarta";
 
@@ -12,8 +11,8 @@ const REQUEST_TIMEOUT_MS = 60000;
 const MAX_RETRIES = 1;
 
 function ensureApiKey() {
-  if (!process.env.SNIFOX_API_KEY) {
-    throw new Error("SNIFOX_API_KEY is missing");
+  if (!process.env.KOBO_API_KEY) {
+    throw new Error("KOBO_API_KEY is missing");
   }
 }
 
@@ -1037,7 +1036,7 @@ async function callGPT(messages, model = CHAT_MODEL, options = {}) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.SNIFOX_API_KEY}`,
+          Authorization: `Bearer ${process.env.KOBO_API_KEY}`,
         },
         signal: controller.signal,
         body: JSON.stringify({
