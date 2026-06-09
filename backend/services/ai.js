@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const API_URL = "https://api.koboillm.com/v1/chat/completions";
 const CHAT_MODEL = "openai/gpt-5.1";
-const ROUTER_MODEL = "openai/gpt-5-nano";
+const ROUTER_MODEL = "openai/gpt-5.1";
 const DEFAULT_TIMEZONE = "Asia/Jakarta";
 
 const MAX_MEMORY_LINES = 60;
