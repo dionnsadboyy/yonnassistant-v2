@@ -1014,7 +1014,7 @@ function buildResponseModeHint(intent, timeInfo) {
 
 // async function callGPT(messages, options = {}) {
 async function callGPT(messages, model = CHAT_MODEL, options = {}) {
-  console.time("SNIFOX_API");
+  console.time("KOBO_API");
   ensureApiKey();
 
   const {
@@ -1054,22 +1054,22 @@ async function callGPT(messages, model = CHAT_MODEL, options = {}) {
       const data = await response.json().catch(() => null);
 
       if (!response.ok) {
-        console.log("SNIFOX ERROR:", data);
+        console.log("KOBO ERROR:", data);
 
         throw new Error(
           data?.error?.message ||
             JSON.stringify(data) ||
-            `Snifox HTTP ${response.status}`,
+            `Kobo HTTP ${response.status}`,
         );
       }
 
       const content = data?.choices?.[0]?.message?.content;
 
       if (!content) {
-        throw new Error("Snifox returned empty content");
+        throw new Error("Kobo returned empty content");
       }
 
-      console.timeEnd("SNIFOX_API");
+      console.timeEnd("KOBO_API");
       return finalizeReply(content);
     } catch (err) {
       clearTimeout(timeout);
@@ -1077,7 +1077,7 @@ async function callGPT(messages, model = CHAT_MODEL, options = {}) {
 
       const retryable =
         String(err?.name || "").toLowerCase() === "aborterror" ||
-        /network|fetch|timeout|503|502|504|429|500|snifox/i.test(
+        /network|fetch|timeout|503|502|504|429|500|kobo/i.test(
           String(err?.message || ""),
         );
 
