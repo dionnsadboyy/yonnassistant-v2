@@ -7,6 +7,17 @@
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
     />
     <title>YonnGPT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+      rel="stylesheet"
+    />
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script src="../../script/supabase.js"></script>
@@ -16,14 +27,24 @@
   <body>
     <div class="chat-page">
       <header class="chat-header">
-        <button class="back-btn" onclick="history.back()">←</button>
+        <button class="back-btn">←</button>
 
         <div class="header-info">
-          <img src="../../assets/iconpack/hello.png" class="header-avatar" />
-
+          <img ... />
           <div>
             <h3>YonnGPT</h3>
             <span>Online</span>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button id="menuBtn" class="menu-btn">
+            <span class="material-symbols-rounded">menu</span>
+          </button>
+
+          <div id="menuPopup" class="menu-popup">
+            <!-- <a href="#" onclick="newChat()">🆕 Chat Baru</a> -->
+            <a href="#" id="newChatBtn">🆕 Chat Baru</a>
           </div>
         </div>
       </header>

@@ -13,7 +13,6 @@ const messages = document.getElementById("chatMessages");
 const input = document.getElementById("messageInput");
 const sendBtn = document.getElementById("sendBtn");
 const quickButtons = document.querySelectorAll(".quick-btn");
-
 /* =========================================================
    ICONS
 ========================================================= */
@@ -26,11 +25,26 @@ const ICONS = {
   saving: "../../assets/iconpack/saving.png",
   surprised: "../../assets/iconpack/surprised.png",
 };
+/* =========================================================
+    CHAT MANAGEMENT 
+========================================================= */
+const menuBtn = document.getElementById("menuBtn");
+const menuPopup = document.getElementById("menuPopup");
 
+menuBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  menuPopup.classList.toggle("show");
+});
+document.getElementById("newChatBtn").addEventListener("click", (e) => {
+  e.preventDefault();
+
+  localStorage.removeItem("yonn_chat_history");
+
+  location.reload();
+});
 /* =========================================================
    CHAT HISTORY
 ========================================================= */
-
 const CHAT_STORAGE_KEY = "yonn_chat_history";
 
 function getChatHistory() {
