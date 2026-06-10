@@ -12,6 +12,7 @@ const API_URL =
 const messages = document.getElementById("chatMessages");
 const input = document.getElementById("messageInput");
 const sendBtn = document.getElementById("sendBtn");
+const micBtn = document.getElementById("micBtn");
 const quickButtons = document.querySelectorAll(".quick-btn");
 /* =========================================================
    ICONS
@@ -90,6 +91,10 @@ function formatMessage(text) {
     .replace(/\n/g, "<br>")
     .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
 }
+
+let mediaRecorder;
+let audioChunks = [];
+let isRecording = false;
 
 /* =========================================================
    USER MESSAGE
@@ -230,7 +235,74 @@ async function askYonn(message) {
 /* =========================================================
    SEND MESSAGE
 ========================================================= */
+async function transcribeAudio(blob) {
+  const fd = new FormData();
 
+  fd.append("audio", blob, "recording.webm");
+
+  const response = await fetch(
+    "https://yonnassistant-v2-production.up.railway.app/api/ai/transcribe",
+    {
+      method: "POST",
+      body: fd,
+    },
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data?.error || "transcribe gagal");
+  }
+
+  return data.text || "";
+}
+async function toggleRecording() {
+  try {
+    if (!isRecording) {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+      });
+
+      audioChunks = [];
+
+      mediaRecorder = new MediaRecorder(stream);
+
+      mediaRecorder.ondataavailable = (e) => {
+        audioChunks.push(e.data);
+      };
+
+      mediaRecorder.onstop = async () => {
+        try {
+          const blob = new Blob(audioChunks, {
+            type: "audio/webm",
+          });
+
+          const text = await transcribeAudio(blob);
+
+          input.value = text;
+        } catch (err) {
+          console.error(err);
+          alert("gagal transcribe");
+        }
+      };
+
+      mediaRecorder.start();
+
+      isRecording = true;
+
+      micBtn.textContent = "⏹";
+    } else {
+      mediaRecorder.stop();
+
+      isRecording = false;
+
+      micBtn.textContent = "🎤";
+    }
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
+  }
+}
 async function sendMessage(customText = null) {
   const text = customText || input.value.trim();
 
@@ -272,7 +344,7 @@ ${error.message}`;
 ========================================================= */
 
 sendBtn.addEventListener("click", () => sendMessage());
-
+micBtn.addEventListener("click", toggleRecording);
 input.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
