@@ -184,7 +184,7 @@ router.post("/transcribe", upload.single("audio"), async (req, res) => {
       {
         headers: {
           ...form.getHeaders(),
-          Authorization: `Bearer ${process.env.SNIFOX_API_KEY}`,
+          Authorization: `Bearer ${process.env.KOBO_API_KEY}`,
         },
         maxBodyLength: Infinity,
       },
