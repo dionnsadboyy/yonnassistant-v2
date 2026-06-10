@@ -205,6 +205,11 @@ router.post("/transcribe", upload.single("audio"), async (req, res) => {
 });
 router.post("/image", upload.single("image"), async (req, res) => {
   try {
+    console.log({
+      hasOpenRouter: !!process.env.OPENROUTER_API_KEY,
+      hasKobo: !!process.env.KOBO_API_KEY,
+    });
+
     if (!req.file) {
       return res.status(400).json({
         success: false,
@@ -215,7 +220,7 @@ router.post("/image", upload.single("image"), async (req, res) => {
     const message = req.body.message || "Jelaskan isi gambar ini";
 
     const base64 = req.file.buffer.toString("base64");
-
+    console.log("OPENROUTER:", process.env.OPENROUTER_API_KEY);
     const response = await axios.post(
       "https://openrouter.ai/api/v1/chat/completions",
       {
@@ -246,7 +251,7 @@ router.post("/image", upload.single("image"), async (req, res) => {
         },
       },
     );
-
+    console.log("OPENROUTER:", process.env.OPENROUTER_API_KEY);
     const answer =
       response.data.choices?.[0]?.message?.content || "Tidak ada jawaban";
 
