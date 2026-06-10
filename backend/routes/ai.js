@@ -1,6 +1,12 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
+const axios = require("axios");
+const FormData = require("form-data");
 
+const upload = multer({
+  storage: multer.memoryStorage(),
+});
 const supabase = require("../services/db");
 const {
   answerNormal,
@@ -155,4 +161,45 @@ router.post("/chat", async (req, res) => {
   }
 });
 
+// TTS TESTING
+router.post("/transcribe", upload.single("audio"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        error: "Audio file required",
+      });
+    }
+
+    const form = new FormData();
+
+    form.append("file", req.file.buffer, req.file.originalname || "voice.webm");
+
+    form.append("model", "openai/whisper-1");
+
+    const response = await axios.post(
+      "https://lite.koboillm.com/v1/audio/transcriptions",
+      form,
+      {
+        headers: {
+          ...form.getHeaders(),
+          Authorization: `Bearer ${process.env.SNIFOX_API_KEY}`,
+        },
+        maxBodyLength: Infinity,
+      },
+    );
+
+    return res.json({
+      success: true,
+      text: response.data.text || "",
+    });
+  } catch (err) {
+    console.error("TRANSCRIBE ERROR:", err?.response?.data || err);
+
+    return res.status(500).json({
+      success: false,
+      error: "Transcribe failed",
+    });
+  }
+});
 module.exports = router;
