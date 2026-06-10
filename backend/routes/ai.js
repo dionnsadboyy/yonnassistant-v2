@@ -163,6 +163,7 @@ router.post("/chat", async (req, res) => {
 
 // TTS TESTING
 router.post("/transcribe", upload.single("audio"), async (req, res) => {
+  console.log("TRANSCRIBE HIT");
   try {
     if (!req.file) {
       return res.status(400).json({
