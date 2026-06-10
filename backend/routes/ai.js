@@ -204,13 +204,27 @@ router.post("/transcribe", upload.single("audio"), async (req, res) => {
   }
 });
 
-router.post("/image", async (req, res) => {
-  return res.json({
-    success: true,
-    kobo: !!process.env.KOBO_API_KEY,
-    supabase: !!process.env.SUPABASE_URL,
-    openrouter: !!process.env.OPENROUTER_API_KEY,
-  });
+router.post("/image", upload.single("image"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        error: "No image uploaded",
+      });
+    }
+
+    return res.json({
+      success: true,
+      answer: `Gambar diterima: ${req.file.originalname}`,
+    });
+  } catch (err) {
+    console.error(err);
+
+    return res.status(500).json({
+      success: false,
+      error: err.message,
+    });
+  }
 });
 
 module.exports = router;
