@@ -203,4 +203,22 @@ router.post("/transcribe", upload.single("audio"), async (req, res) => {
     });
   }
 });
+router.post("/image", upload.single("image"), async (req, res) => {
+  console.log("IMAGE HIT");
+
+  if (!req.file) {
+    return res.status(400).json({
+      success: false,
+      error: "No image",
+    });
+  }
+
+  console.log("NAME:", req.file.originalname);
+  console.log("SIZE:", req.file.size);
+  console.log("TYPE:", req.file.mimetype);
+
+  return res.json({
+    success: true,
+  });
+});
 module.exports = router;

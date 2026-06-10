@@ -47,7 +47,6 @@ document.getElementById("newChatBtn").addEventListener("click", (e) => {
    CHAT HISTORY
 ========================================================= */
 const CHAT_STORAGE_KEY = "yonn_chat_history";
-
 function getChatHistory() {
   return JSON.parse(localStorage.getItem(CHAT_STORAGE_KEY) || "[]");
 }
@@ -70,6 +69,58 @@ function addHistory(role, content) {
   }
 
   saveChatHistory(history);
+}
+
+// IMAGE UPLOAD
+const imageBtn = document.getElementById("imageBtn");
+const imageInput = document.getElementById("imageInput");
+imageInput.addEventListener("change", () => {
+  const file = imageInput.files[0];
+
+  selectedImage = file;
+  console.log(selectedImage.name, selectedImage.size, selectedImage.type);
+
+  if (!file) return;
+
+  const url = URL.createObjectURL(file);
+
+  messages.innerHTML += `
+    <div class="user-message">
+      <div class="message-bubble">
+        <img
+          src="${url}"
+          style="
+            max-width:220px;
+            border-radius:12px;
+          "
+        >
+      </div>
+    </div>
+  `;
+
+  scrollBottom();
+});
+
+imageBtn.addEventListener("click", () => {
+  imageInput.click();
+});
+
+async function uploadImage() {
+  if (!selectedImage) return;
+
+  const fd = new FormData();
+
+  fd.append("image", selectedImage);
+
+  const response = await fetch(
+    "https://yonnassistant-v2-production.up.railway.app/api/ai/image",
+    {
+      method: "POST",
+      body: fd,
+    },
+  );
+
+  return response.json();
 }
 
 /* =========================================================
@@ -95,7 +146,7 @@ function formatMessage(text) {
 let mediaRecorder;
 let audioChunks = [];
 let isRecording = false;
-
+let selectedImage = null;
 /* =========================================================
    USER MESSAGE
 ========================================================= */
@@ -393,3 +444,4 @@ window.clearYonnChat = function () {
 
   location.reload();
 };
+window.testImage = uploadImage;
