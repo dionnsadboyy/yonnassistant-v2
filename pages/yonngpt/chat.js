@@ -387,6 +387,12 @@ async function sendMessage(customText = null) {
 
       result = await response.json();
 
+      if (!response.ok) {
+        throw new Error(result.error || "Request gagal");
+      }
+
+      const answer = result.answer || "tidak ada jawaban";
+
       selectedImage = null;
       imageInput.value = "";
     } else {
