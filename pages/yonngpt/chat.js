@@ -357,37 +357,51 @@ async function toggleRecording() {
 async function sendMessage(customText = null) {
   const text = customText || input.value.trim();
 
-  if (!text) return;
+  if (!text && !selectedImage) return;
 
-  addUserMessage(text);
-  addHistory("user", text);
+  if (text) {
+    addUserMessage(text);
+    addHistory("user", text);
+  }
 
   input.value = "";
 
   const thinking = addThinkingMessage();
 
-  let answer = "";
-
   try {
-    const result = await askYonn(text);
+    let result;
 
-    answer = result.answer || "tidak ada jawaban.";
+    if (selectedImage) {
+      const fd = new FormData();
 
-    const avatar = detectAvatar(answer);
+      fd.append("image", selectedImage);
+      fd.append("message", text || "Jelaskan isi gambar ini");
 
-    updateBotMessage(thinking, answer, avatar);
+      const response = await fetch(
+        "https://yonnassistant-v2-production.up.railway.app/api/ai/image",
+        {
+          method: "POST",
+          body: fd,
+        },
+      );
+
+      result = await response.json();
+
+      selectedImage = null;
+      imageInput.value = "";
+    } else {
+      result = await askYonn(text);
+    }
+
+    const answer = result.answer || "tidak ada jawaban";
+
+    updateBotMessage(thinking, answer, detectAvatar(answer));
 
     addHistory("assistant", answer);
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    console.error(err);
 
-    answer = `yonn lagi ada masalah 😅
-
-${error.message}`;
-
-    updateBotMessage(thinking, answer, ICONS.surprised);
-
-    addHistory("assistant", answer);
+    updateBotMessage(thinking, err.message, ICONS.surprised);
   }
 }
 /* =========================================================

@@ -204,21 +204,63 @@ router.post("/transcribe", upload.single("audio"), async (req, res) => {
   }
 });
 router.post("/image", upload.single("image"), async (req, res) => {
-  console.log("IMAGE HIT");
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        error: "No image",
+      });
+    }
 
-  if (!req.file) {
-    return res.status(400).json({
+    const message = req.body.message || "Jelaskan isi gambar ini";
+
+    const base64 = req.file.buffer.toString("base64");
+
+    const response = await axios.post(
+      "https://openrouter.ai/api/v1/chat/completions",
+      {
+        model: "google/gemini-2.5-flash",
+
+        messages: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text: message,
+              },
+              {
+                type: "image_url",
+                image_url: {
+                  url: `data:${req.file.mimetype};base64,${base64}`,
+                },
+              },
+            ],
+          },
+        ],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    const answer =
+      response.data.choices?.[0]?.message?.content || "Tidak ada jawaban";
+
+    return res.json({
+      success: true,
+      answer,
+    });
+  } catch (err) {
+    console.error("VISION ERROR:", err?.response?.data || err);
+
+    return res.status(500).json({
       success: false,
-      error: "No image",
+      error: "Vision gagal",
     });
   }
-
-  console.log("NAME:", req.file.originalname);
-  console.log("SIZE:", req.file.size);
-  console.log("TYPE:", req.file.mimetype);
-
-  return res.json({
-    success: true,
-  });
 });
 module.exports = router;
