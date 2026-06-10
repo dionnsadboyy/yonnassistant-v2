@@ -388,10 +388,15 @@ async function sendMessage(customText = null) {
       result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error || "Request gagal");
+        throw new Error(result.error || `HTTP ${response.status}`);
       }
 
       const answer = result.answer || "tidak ada jawaban";
+      // const answer = result.answer || "tidak ada jawaban";
+
+      updateBotMessage(thinking, answer, detectAvatar(answer));
+
+      addHistory("assistant", answer);
 
       selectedImage = null;
       imageInput.value = "";
