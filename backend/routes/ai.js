@@ -3,6 +3,9 @@ const router = express.Router();
 const multer = require("multer");
 const axios = require("axios");
 const FormData = require("form-data");
+const personality = require("../prompt/personality");
+const antiNpc = require("../prompt/antiNpc");
+const conversationRules = require("../prompt/conversationRules");
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -204,79 +207,103 @@ router.post("/transcribe", upload.single("audio"), async (req, res) => {
   }
 });
 
-router.post(
-  "/image",
-  upload.single("image"),
-  async (req, res) => {
-    try {
-      if (!req.file) {
-        return res.status(400).json({
-          success: false,
-          error: "No image uploaded",
-        });
-      }
-
-      const message =
-        req.body.message || "Jelaskan isi gambar ini";
-
-      const base64 = req.file.buffer.toString("base64");
-
-      const response = await axios.post(
-        "https://api.koboillm.com/v1/chat/completions",
-        {
-          model: "openai/gpt-4o",
-
-          messages: [
-            {
-              role: "user",
-              content: [
-                {
-                  type: "text",
-                  text: message,
-                },
-                {
-                  type: "image_url",
-                  image_url: {
-                    url: `data:${req.file.mimetype};base64,${base64}`,
-                  },
-                },
-              ],
-            },
-          ],
-
-          max_tokens: 1000,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.KOBO_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-        },
-      );
-
-      const answer =
-        response.data?.choices?.[0]?.message?.content ||
-        "Tidak ada jawaban";
-
-      return res.json({
-        success: true,
-        answer,
-      });
-    } catch (err) {
-      console.error(
-        "VISION ERROR:",
-        err?.response?.data || err.message || err,
-      );
-
-      return res.status(500).json({
+router.post("/image", upload.single("image"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
         success: false,
-        error:
-          err?.response?.data?.error?.message ||
-          err.message ||
-          "Vision gagal",
+        error: "No image uploaded",
       });
     }
-  },
-);
+    const message = req.body.message || "Jelaskan isi gambar ini";
+
+    const base64 = req.file.buffer.toString("base64");
+
+    const systemPrompt = `
+kamu adalah yonn.
+
+identitas:
+- teman digital dion
+- ngobrol santai
+- pakai gua dan lo
+- jangan formal
+- jangan seperti artikel
+- jangan seperti laporan
+- jangan seperti customer service
+
+aturan gaya:
+${personality}
+
+aturan anti npc:
+${antiNpc}
+
+contoh percakapan:
+${conversationRules}
+
+saat menganalisa gambar:
+
+- jawab seperti lagi ngobrol dengan dion
+- jangan menjelaskan seperti wikipedia
+- jangan menggunakan bahasa inggris kecuali diminta
+- boleh bercanda ringan
+- boleh kasih opini
+- jangan terlalu panjang
+`;
+
+    const response = await axios.post(
+      "https://api.koboillm.com/v1/chat/completions",
+      {
+        model: "openai/gpt-4o",
+
+        messages: [
+          {
+            role: "system",
+            content: systemPrompt,
+          },
+
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text: message,
+              },
+              {
+                type: "image_url",
+                image_url: {
+                  url: `data:${req.file.mimetype};base64,${base64}`,
+                },
+              },
+            ],
+          },
+        ],
+
+        max_tokens: 1000,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.KOBO_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    const answer =
+      response.data?.choices?.[0]?.message?.content || "Tidak ada jawaban";
+
+    return res.json({
+      success: true,
+      answer,
+    });
+  } catch (err) {
+    console.error("VISION ERROR:", err?.response?.data || err.message || err);
+
+    return res.status(500).json({
+      success: false,
+      error:
+        err?.response?.data?.error?.message || err.message || "Vision gagal",
+    });
+  }
+});
 
 module.exports = router;
