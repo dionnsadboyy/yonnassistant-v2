@@ -204,22 +204,13 @@ router.post("/transcribe", upload.single("audio"), async (req, res) => {
   }
 });
 
-router.post("/image", upload.single("image"), async (req, res) => {
-  try {
-    console.log("IMAGE ROUTE HIT");
-
-    console.log({
-      hasOpenRouter: !!process.env.OPENROUTER_API_KEY,
-      keyLength: process.env.OPENROUTER_API_KEY?.length || 0,
-    });
-
-    return res.json({
-      success: true,
-      answer: "DEBUG",
-    });
-  } catch (err) {
-    console.error(err);
-  }
+router.post("/image", async (req, res) => {
+  return res.json({
+    success: true,
+    kobo: !!process.env.KOBO_API_KEY,
+    supabase: !!process.env.SUPABASE_URL,
+    openrouter: !!process.env.OPENROUTER_API_KEY,
+  });
 });
 
 module.exports = router;
