@@ -205,11 +205,21 @@ router.post("/transcribe", upload.single("audio"), async (req, res) => {
 });
 
 router.post("/image", upload.single("image"), async (req, res) => {
-  console.log("🔥 IMAGE ROUTE HIT");
+  try {
+    console.log("IMAGE ROUTE HIT");
 
-  return res.json({
-    success: true,
-    answer: "IMAGE ROUTE BERHASIL",
-  });
+    console.log({
+      hasOpenRouter: !!process.env.OPENROUTER_API_KEY,
+      keyLength: process.env.OPENROUTER_API_KEY?.length || 0,
+    });
+
+    return res.json({
+      success: true,
+      answer: "DEBUG",
+    });
+  } catch (err) {
+    console.error(err);
+  }
 });
+
 module.exports = router;
