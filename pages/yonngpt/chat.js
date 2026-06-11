@@ -14,6 +14,7 @@ const input = document.getElementById("messageInput");
 const sendBtn = document.getElementById("sendBtn");
 const micBtn = document.getElementById("micBtn");
 const quickButtons = document.querySelectorAll(".quick-btn");
+const emptyState = document.getElementById("emptyState");
 /* =========================================================
    ICONS
 ========================================================= */
@@ -26,6 +27,9 @@ const ICONS = {
   saving: "../../assets/iconpack/saving.png",
   surprised: "../../assets/iconpack/surprised.png",
 };
+
+// UX PREFERENCES
+
 /* =========================================================
     CHAT MANAGEMENT 
 ========================================================= */
@@ -40,7 +44,7 @@ document.getElementById("newChatBtn").addEventListener("click", (e) => {
   e.preventDefault();
 
   localStorage.removeItem("yonn_chat_history");
-
+  updateEmptyState();
   location.reload();
 });
 /* =========================================================
@@ -126,6 +130,56 @@ async function uploadImage() {
 /* =========================================================
    HELPERS
 ========================================================= */
+// kontrol mic
+function updateSendButton() {
+  if (input.value.trim()) {
+    sendBtn.textContent = "➤";
+  } else {
+    sendBtn.textContent = "🎤";
+  }
+}
+updateSendButton();
+input.addEventListener("input", () => {
+  updateSendButton();
+});
+
+let holdTimer;
+let longPressTriggered = false;
+
+function startHold() {
+  if (input.value.trim()) return;
+
+  longPressTriggered = false;
+
+  holdTimer = setTimeout(() => {
+    longPressTriggered = true;
+
+    toggleRecording();
+
+    sendBtn.textContent = "⏹";
+  }, 350);
+}
+function endHold() {
+  clearTimeout(holdTimer);
+
+  if (!longPressTriggered) return;
+
+  if (isRecording) {
+    toggleRecording();
+
+    sendBtn.textContent = "🎤";
+  }
+}
+
+function updateEmptyState() {
+  const history = getChatHistory();
+
+  if (history.length > 0) {
+    emptyState.style.display = "none";
+  } else {
+    emptyState.style.display = "flex";
+  }
+}
 
 function scrollBottom() {
   messages.scrollTop = messages.scrollHeight;
@@ -331,6 +385,7 @@ async function toggleRecording() {
           const text = await transcribeAudio(blob);
 
           input.value = text;
+          updateSendButton();
         } catch (err) {
           console.error(err);
           alert("gagal transcribe");
@@ -361,7 +416,10 @@ async function sendMessage(customText = null) {
 
   if (text) {
     addUserMessage(text);
+
     addHistory("user", text);
+
+    updateEmptyState();
   }
 
   input.value = "";
@@ -419,7 +477,27 @@ async function sendMessage(customText = null) {
    EVENTS
 ========================================================= */
 
-sendBtn.addEventListener("click", () => sendMessage());
+// sendBtn.addEventListener("click", () => sendMessage())
+sendBtn.addEventListener("click", () => {
+  if (!input.value.trim()) {
+    return;
+  }
+
+  sendMessage();
+
+  updateSendButton();
+});
+sendBtn.addEventListener("mousedown", startHold);
+
+sendBtn.addEventListener("mouseup", endHold);
+
+sendBtn.addEventListener("mouseleave", endHold);
+
+sendBtn.addEventListener("touchstart", startHold, { passive: true });
+
+sendBtn.addEventListener("touchend", endHold);
+
+sendBtn.addEventListener("touchcancel", endHold);
 micBtn.addEventListener("click", toggleRecording);
 input.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
@@ -456,6 +534,8 @@ function renderSavedHistory() {
   });
 }
 window.addEventListener("load", () => {
+  updateEmptyState();
+
   renderSavedHistory();
 
   setTimeout(() => {
@@ -464,6 +544,7 @@ window.addEventListener("load", () => {
 
   console.log("🔥 YonnGPT V4 Ready");
 });
+
 window.clearYonnChat = function () {
   localStorage.removeItem(CHAT_STORAGE_KEY);
 

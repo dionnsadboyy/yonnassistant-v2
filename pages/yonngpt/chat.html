@@ -24,66 +24,121 @@
 
     <link rel="stylesheet" href="chat.css" />
   </head>
-  <body>
-    <div class="chat-page">
-      <header class="chat-header">
-        <button class="back-btn">←</button>
+ <body>
+  <div class="chat-page">
 
-        <div class="header-info">
-          <img ... />
-          <div>
-            <h3>YonnGPT</h3>
-            <span>Online</span>
-          </div>
+    <!-- HEADER -->
+
+    <header class="chat-header">
+      <button class="back-btn">←</button>
+
+      <div class="header-info">
+        <img
+          src="../../assets/iconpack/hello.png"
+          class="header-avatar"
+        />
+
+        <div>
+          <h3>YonnGPT</h3>
+          <span>Online</span>
         </div>
+      </div>
 
-        <div class="header-actions">
-          <button id="menuBtn" class="menu-btn">
-            <span class="material-symbols-rounded">menu</span>
+      <div class="header-actions">
+        <button id="menuBtn" class="menu-btn">
+          <span class="material-symbols-rounded">
+            menu
+          </span>
+        </button>
+
+        <div id="menuPopup" class="menu-popup">
+          <a href="#" id="newChatBtn">
+            🆕 Chat Baru
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- CHAT AREA -->
+
+    <div id="chatMessages" class="chat-messages">
+
+      <!-- EMPTY STATE -->
+
+      <div id="emptyState" class="empty-state">
+
+        <img
+          src="../../assets/iconpack/hello.png"
+          class="empty-avatar"
+        />
+
+        <h2>Halo Dion 👋</h2>
+
+        <p>
+          Ada yang mau dibahas hari ini?
+        </p>
+
+        <div class="quick-ask">
+          <button class="quick-btn">
+            💸 Kemana uang gue?
           </button>
 
-          <div id="menuPopup" class="menu-popup">
-            <!-- <a href="#" onclick="newChat()">🆕 Chat Baru</a> -->
-            <a href="#" id="newChatBtn">🆕 Chat Baru</a>
-          </div>
+          <button class="quick-btn">
+            📉 Boros bulan ini?
+          </button>
+
+          <button class="quick-btn">
+            🎯 Budget minggu depan
+          </button>
+
+          <button class="quick-btn">
+            🚬 Pengeluaran rokok
+          </button>
         </div>
-      </header>
 
-      <div id="chatMessages" class="chat-messages">
-        <div class="bot-message">
-          <img src="../../assets/iconpack/hello.png" class="message-avatar" />
-
-          <div class="message-bubble">
-            Halo Dion 👋
-
-            <br /><br />
-
-            Ada yang mau dibahas hari ini?
-          </div>
-        </div>
       </div>
 
-      <div class="quick-ask">
-        <button class="quick-btn">💸 Kemana uang gue?</button>
+      <!-- CHAT HISTORY RENDER DI SINI -->
 
-        <button class="quick-btn">📉 Boros bulan ini?</button>
-
-        <button class="quick-btn">🎯 Budget minggu depan</button>
-
-        <button class="quick-btn">🚬 Pengeluaran rokok</button>S
-      </div>
-
-      <div class="chat-input">
-        <input type="file" id="imageInput" accept="image/*" hidden />
-
-        <button id="imageBtn">📷</button>
-        <input id="messageInput" type="text" placeholder="Tanya Yonn..." />
-        <button id="micBtn">🎤</button>
-        <button id="sendBtn">➤</button>
-      </div>
     </div>
 
-    <script src="analythic.js"></script>
-    <script src="chat.js"></script>
-  </body>
+    <!-- INPUT AREA -->
+
+    <div class="chat-input">
+
+      <input
+        type="file"
+        id="imageInput"
+        accept="image/*"
+        hidden
+      />
+
+      <button id="imageBtn">
+        📷
+      </button>
+
+      <input
+        id="messageInput"
+        type="text"
+        placeholder="Tanya Yonn..."
+      />
+
+      <!-- KEEP DULU -->
+      <button
+        id="micBtn"
+        style="display:none;"
+      >
+        🎤
+      </button>
+
+      <button id="sendBtn">
+        ➤
+      </button>
+
+    </div>
+
+  </div>
+  <script src="chat.js"></script>
+  <script src="analytics.js"></script>
+</body>
 </html>
