@@ -498,7 +498,11 @@ sendBtn.addEventListener("touchstart", startHold, { passive: true });
 sendBtn.addEventListener("touchend", endHold);
 
 sendBtn.addEventListener("touchcancel", endHold);
-micBtn.addEventListener("click", toggleRecording);
+micBtn.addEventListener("click", () => {
+  toggleRecording();
+
+  document.querySelector(".chat-input").classList.toggle("recording-mode");
+});
 input.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     e.preventDefault();
