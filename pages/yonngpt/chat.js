@@ -133,11 +133,11 @@ async function uploadImage() {
 ========================================================= */
 // kontrol mic
 function updateSendButton() {
-  if (input.value.trim()) {
-    sendBtn.textContent = "➤";
-  } else {
-    sendBtn.textContent = "🎤";
-  }
+  const hasText = input.value.trim().length > 0;
+
+  sendBtn.style.opacity = hasText ? "1" : ".4";
+
+  sendBtn.disabled = !hasText;
 }
 updateSendButton();
 input.addEventListener("input", () => {
