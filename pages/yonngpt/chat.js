@@ -13,6 +13,7 @@ const messages = document.getElementById("chatMessages");
 const input = document.getElementById("messageInput");
 const sendBtn = document.getElementById("sendBtn");
 const micBtn = document.getElementById("micBtn");
+const recordingUI = document.getElementById("recordingUI");
 const quickButtons = document.querySelectorAll(".quick-btn");
 const emptyState = document.getElementById("emptyState");
 /* =========================================================
@@ -378,16 +379,49 @@ async function toggleRecording() {
 
       mediaRecorder.onstop = async () => {
         try {
+          // tampil state transcribing
+          recordingUI.innerHTML = `
+            <span>
+              🔄 Mengubah suara menjadi teks...
+            </span>
+          `;
+
           const blob = new Blob(audioChunks, {
             type: "audio/webm",
           });
 
           const text = await transcribeAudio(blob);
 
+          // balikin UI normal
+          recordingUI.style.display = "none";
+          input.style.display = "block";
+
           input.value = text;
+
+          input.focus();
+
           updateSendButton();
+
+          // reset isi recordingUI
+          recordingUI.innerHTML = `
+            <div class="record-dot"></div>
+
+            <span>Mendengarkan...</span>
+
+            <div class="wave">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          `;
         } catch (err) {
           console.error(err);
+
+          recordingUI.style.display = "none";
+          input.style.display = "block";
+
           alert("gagal transcribe");
         }
       };
@@ -396,23 +430,29 @@ async function toggleRecording() {
 
       isRecording = true;
 
-      document.querySelector(".chat-input").classList.add("recording");
+      // tampil mode recording
+      recordingUI.style.display = "flex";
+
+      input.style.display = "none";
+
+      micBtn.classList.add("recording");
 
       micBtn.textContent = "⏹";
     } else {
-      mediaRecorder.stop();
-
       isRecording = false;
 
-      document.querySelector(".chat-input").classList.remove("recording");
+      micBtn.classList.remove("recording");
 
       micBtn.textContent = "🎤";
+
+      mediaRecorder.stop();
     }
   } catch (err) {
     console.error(err);
     alert(err.message);
   }
 }
+
 async function sendMessage(customText = null) {
   const text = customText || input.value.trim();
 

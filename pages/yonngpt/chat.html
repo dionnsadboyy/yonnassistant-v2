@@ -80,27 +80,33 @@
       <!-- INPUT AREA -->
 
       <div class="chat-input">
-        <div class="voice-indicator">
-          <span class="voice-dot"></span>
-
-          <span class="voice-text"> Mendengarkan... </span>
-
-          <div class="voice-wave">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
         <input type="file" id="imageInput" accept="image/*" hidden />
 
-        <button id="imageBtn">📷</button>
+        <button id="imageBtn">+</button>
 
-        <input id="messageInput" type="text" placeholder="Tanya Yonn..." />
+        <div class="input-wrapper">
+          <input
+            id="messageInput"
+            type="text"
+            placeholder="Tanyakan apa saja"
+          />
 
-        <!-- KEEP DULU -->
-        <button id="micBtn" style="display: none">🎤</button>
+          <div id="recordingUI" class="recording-ui">
+            <div class="record-dot"></div>
+
+            <span> Mendengarkan... </span>
+
+            <div class="wave">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+
+        <button id="micBtn">🎤</button>
 
         <button id="sendBtn">➤</button>
       </div>
