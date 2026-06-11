@@ -396,11 +396,15 @@ async function toggleRecording() {
 
       isRecording = true;
 
+      document.querySelector(".chat-input").classList.add("recording");
+
       micBtn.textContent = "⏹";
     } else {
       mediaRecorder.stop();
 
       isRecording = false;
+
+      document.querySelector(".chat-input").classList.remove("recording");
 
       micBtn.textContent = "🎤";
     }
@@ -503,12 +507,11 @@ micBtn.addEventListener("click", () => {
 
   document.querySelector(".chat-input").classList.toggle("recording-mode");
 });
-input.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    e.preventDefault();
-
-    sendMessage();
-  }
+sendBtn.addEventListener("contextmenu", (e) => {
+  e.preventDefault();
+});
+micBtn.addEventListener("contextmenu", (e) => {
+  e.preventDefault();
 });
 
 quickButtons.forEach((btn) => {
@@ -555,3 +558,6 @@ window.clearYonnChat = function () {
   location.reload();
 };
 window.testImage = uploadImage;
+document.addEventListener("contextmenu", (e) => {
+  e.preventDefault();
+});
