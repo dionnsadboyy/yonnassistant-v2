@@ -16,6 +16,7 @@ const micBtn = document.getElementById("micBtn");
 const recordingUI = document.getElementById("recordingUI");
 const quickButtons = document.querySelectorAll(".quick-btn");
 const emptyState = document.getElementById("emptyState");
+const statusText = document.getElementById("statusText");
 /* =========================================================
    ICONS
 ========================================================= */
@@ -140,8 +141,13 @@ function updateSendButton() {
   sendBtn.disabled = !hasText;
 }
 updateSendButton();
+
 input.addEventListener("input", () => {
   updateSendButton();
+
+  input.style.height = "auto";
+
+  input.style.height = Math.min(input.scrollHeight, 120) + "px";
 });
 
 let holdTimer;
@@ -207,6 +213,8 @@ let selectedImage = null;
 ========================================================= */
 
 function addUserMessage(text) {
+  emptyState.style.display = "none";
+
   messages.innerHTML += `
     <div class="user-message">
       <div class="message-bubble">
@@ -455,9 +463,8 @@ async function toggleRecording() {
 
 async function sendMessage(customText = null) {
   const text = customText || input.value.trim();
-
   if (!text && !selectedImage) return;
-
+  statusText.textContent = "Lagi mikir...";
   if (text) {
     addUserMessage(text);
 
@@ -469,7 +476,6 @@ async function sendMessage(customText = null) {
   input.value = "";
 
   const thinking = addThinkingMessage();
-
   try {
     let result;
 
@@ -486,7 +492,7 @@ async function sendMessage(customText = null) {
           body: fd,
         },
       );
-
+      statusText.textContent = "Siap ngobrol";
       result = await response.json();
 
       if (!response.ok) {
@@ -494,12 +500,11 @@ async function sendMessage(customText = null) {
       }
 
       const answer = result.answer || "tidak ada jawaban";
-      // const answer = result.answer || "tidak ada jawaban";
-
+      statusText.textContent = "Ada gangguan";
       updateBotMessage(thinking, answer, detectAvatar(answer));
 
       addHistory("assistant", answer);
-
+      statusText.textContent = "Siap ngobrol";
       selectedImage = null;
       imageInput.value = "";
     } else {
@@ -512,6 +517,7 @@ async function sendMessage(customText = null) {
 
     addHistory("assistant", answer);
   } catch (err) {
+    statusText.textContent = "Ada gangguan";
     console.error(err);
 
     updateBotMessage(thinking, err.message, ICONS.surprised);
@@ -521,7 +527,6 @@ async function sendMessage(customText = null) {
    EVENTS
 ========================================================= */
 
-// sendBtn.addEventListener("click", () => sendMessage())
 sendBtn.addEventListener("click", () => {
   if (!input.value.trim()) {
     return;

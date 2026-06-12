@@ -523,15 +523,23 @@ input,
     );
 }
 
-.chat-input input{
+.chat-input textarea{
   flex:1;
 
   border:none;
   outline:none;
 
+  resize:none;
+
+  min-height:52px;
+  max-height:120px;
+
+  overflow-y:auto;
+
   color:white;
 
   font-size:15px;
+  font-family:Inter,sans-serif;
 
   padding:16px;
 
@@ -544,7 +552,7 @@ input,
     1px solid rgba(255,255,255,.05);
 }
 
-.chat-input input::placeholder{
+.chat-input textarea::placeholder{
   color:
     rgba(255,255,255,.4);
 }

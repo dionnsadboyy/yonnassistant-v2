@@ -36,7 +36,7 @@
 
           <div>
             <h3>YonnGPT</h3>
-            <span>Online</span>
+            <span id="statusText">Siap ngobrol</span>
           </div>
         </div>
 
@@ -82,14 +82,16 @@
       <div class="chat-input">
         <input type="file" id="imageInput" accept="image/*" hidden />
 
-        <button id="imageBtn">+</button>
+        <button id="imageBtn">
+          <span class="material-symbols-rounded"> image </span>
+        </button>
 
         <div class="input-wrapper">
-          <input
+          <textarea
             id="messageInput"
-            type="text"
             placeholder="Tanyakan apa saja"
-          />
+            rows="1"
+          ></textarea>
 
           <div id="recordingUI" class="recording-ui">
             <div class="record-dot"></div>
