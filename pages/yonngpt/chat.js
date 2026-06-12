@@ -452,6 +452,7 @@ async function toggleRecording() {
 }
 
 async function sendMessage(customText = null) {
+  console.log("IMAGE:", selectedImage);
   const text = customText || input.value.trim();
   if (text || selectedImage) {
     let imageHtml = "";
