@@ -256,6 +256,36 @@ saat menganalisa gambar:
 - boleh kasih opini
 - jangan terlalu panjang
 `;
+    console.log("MIMETYPE:", req.file.mimetype);
+    console.log("SIZE:", req.file.size);
+    console.log("BASE64:", base64.length);
+
+    console.log(
+      JSON.stringify(
+        {
+          model: "openai/gpt-4o",
+          messages: [
+            {
+              role: "user",
+              content: [
+                {
+                  type: "text",
+                  text: "apa isi gambar ini?",
+                },
+                {
+                  type: "image_url",
+                  image_url: {
+                    url: `data:${req.file.mimetype};base64,${base64.slice(0, 100)}...`,
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        null,
+        2,
+      ),
+    );
 
     const response = await axios.post(
       "https://api.koboillm.com/v1/chat/completions",
