@@ -450,6 +450,8 @@ input,
   gap:10px;
 
   margin-bottom:18px;
+}
+.user-message{
   justify-content:flex-end;
 }
 .user-message{
