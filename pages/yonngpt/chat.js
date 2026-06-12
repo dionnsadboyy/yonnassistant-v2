@@ -80,37 +80,32 @@ function addHistory(role, content) {
 // IMAGE UPLOAD
 const imageBtn = document.getElementById("imageBtn");
 const imageInput = document.getElementById("imageInput");
+const imagePreview = document.getElementById("imagePreview");
+const previewImage = document.getElementById("previewImage");
+const removeImageBtn = document.getElementById("removeImageBtn");
 imageInput.addEventListener("change", () => {
   const file = imageInput.files[0];
 
-  selectedImage = file;
-  console.log(selectedImage.name, selectedImage.size, selectedImage.type);
-
   if (!file) return;
+
+  selectedImage = file;
 
   const url = URL.createObjectURL(file);
 
-  messages.innerHTML += `
-    <div class="user-message">
-      <div class="message-bubble">
-        <img
-          src="${url}"
-          style="
-            max-width:220px;
-            border-radius:12px;
-          "
-        >
-      </div>
-    </div>
-  `;
+  previewImage.src = url;
 
-  scrollBottom();
+  imagePreview.style.display = "block";
 });
+removeImageBtn.addEventListener("click", () => {
+  selectedImage = null;
 
+  imageInput.value = "";
+
+  imagePreview.style.display = "none";
+});
 imageBtn.addEventListener("click", () => {
   imageInput.click();
 });
-
 async function uploadImage() {
   if (!selectedImage) return;
 
@@ -454,6 +449,35 @@ async function toggleRecording() {
 
 async function sendMessage(customText = null) {
   const text = customText || input.value.trim();
+  if (selectedImage) {
+    const url = URL.createObjectURL(selectedImage);
+
+    messages.innerHTML += `
+    <div class="user-message">
+
+      <div class="message-bubble">
+
+        <img
+          src="${url}"
+          style="
+            max-width:220px;
+            border-radius:12px;
+            display:block;
+            margin-bottom:${text ? "10px" : "0"};
+          "
+        >
+
+        ${text ? formatMessage(text) : ""}
+
+      </div>
+
+    </div>
+  `;
+
+    emptyState.style.display = "none";
+
+    scrollBottom();
+  }
   if (!text && !selectedImage) return;
   statusText.textContent = "Lagi mikir...";
   if (text) {
@@ -496,6 +520,7 @@ async function sendMessage(customText = null) {
       addHistory("assistant", answer);
       statusText.textContent = "Siap ngobrol";
       selectedImage = null;
+      imagePreview.style.display = "none";
       imageInput.value = "";
     } else {
       result = await askYonn(text);

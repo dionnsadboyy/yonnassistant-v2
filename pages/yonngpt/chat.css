@@ -597,6 +597,63 @@ input,
     0 10px 25px rgba(124,58,237,.25);
 }
 
+.input-wrapper{
+  flex:1;
+
+  display:flex;
+  flex-direction:column;
+
+  gap:10px;
+}
+
+.image-preview{
+  position:relative;
+
+  width:110px;
+}
+
+.image-preview img{
+  width:110px;
+  height:110px;
+
+  object-fit:cover;
+
+  border-radius:16px;
+
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.image-preview button{
+  position:absolute;
+
+  top:-6px;
+  right:-6px;
+
+  width:26px;
+  height:26px;
+
+  border:none;
+
+  border-radius:50%;
+
+  background:#ff3b30;
+
+  color:white;
+
+  cursor:pointer;
+}
+
+#messageInput{
+  width:100%;
+
+  resize:none;
+
+  min-height:52px;
+  max-height:120px;
+
+  overflow-y:auto;
+}
+
 /* =====================================
    TYPING
 ===================================== */

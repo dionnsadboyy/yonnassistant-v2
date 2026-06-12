@@ -85,6 +85,12 @@
         </button>
 
         <div class="input-wrapper">
+          <div id="imagePreview" class="image-preview" style="display: none">
+            <img id="previewImage" />
+
+            <button id="removeImageBtn" type="button">✕</button>
+          </div>
+
           <textarea
             id="messageInput"
             placeholder="Tanyakan apa saja"
@@ -94,7 +100,7 @@
           <div id="recordingUI" class="recording-ui">
             <div class="record-dot"></div>
 
-            <span> Mendengarkan... </span>
+            <span>Mendengarkan...</span>
 
             <div class="wave">
               <span></span>
