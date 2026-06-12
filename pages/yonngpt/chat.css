@@ -531,7 +531,7 @@ input,
 
   resize:none;
 
-  min-height:52px;
+  min-height:32px;
   max-height:120px;
 
   overflow-y:auto;
