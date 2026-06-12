@@ -449,23 +449,30 @@ async function toggleRecording() {
 
 async function sendMessage(customText = null) {
   const text = customText || input.value.trim();
-  if (selectedImage) {
-    const url = URL.createObjectURL(selectedImage);
+  if (text || selectedImage) {
+    let imageHtml = "";
+
+    if (selectedImage) {
+      const url = URL.createObjectURL(selectedImage);
+
+      imageHtml = `
+      <img
+        src="${url}"
+        style="
+          width:100%;
+          border-radius:14px;
+          margin-bottom:${text ? "12px" : "0"};
+        "
+      >
+    `;
+    }
 
     messages.innerHTML += `
     <div class="user-message">
 
       <div class="message-bubble">
 
-        <img
-          src="${url}"
-          style="
-            max-width:220px;
-            border-radius:12px;
-            display:block;
-            margin-bottom:${text ? "10px" : "0"};
-          "
-        >
+        ${imageHtml}
 
         ${text ? formatMessage(text) : ""}
 
@@ -478,7 +485,6 @@ async function sendMessage(customText = null) {
 
     scrollBottom();
   }
-  if (!text && !selectedImage) return;
   statusText.textContent = "Lagi mikir...";
   if (text) {
     addUserMessage(text);
