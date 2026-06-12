@@ -477,7 +477,7 @@ async function sendMessage(customText = null) {
     emptyState.style.display = "none";
     scrollBottom();
   }
-  statusText.textContent = "Lagi mikir...";
+  statusText.textContent = "Obrolan sedang berlangsung";
   input.value = "";
   input.style.height = "52px";
 
