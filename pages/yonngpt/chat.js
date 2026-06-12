@@ -489,7 +489,10 @@ async function sendMessage(customText = null) {
       const fd = new FormData();
 
       fd.append("image", selectedImage);
+
       fd.append("message", text || "Jelaskan isi gambar ini");
+
+      fd.append("history", JSON.stringify(getChatHistory()));
 
       const response = await fetch(
         "https://yonnassistant-v2-production.up.railway.app/api/ai/image",

@@ -216,7 +216,14 @@ router.post("/image", upload.single("image"), async (req, res) => {
       });
     }
     const message = req.body.message || "Jelaskan isi gambar ini";
+    const history = JSON.parse(req.body.history || "[]");
 
+    const memories = await loadUserMemory();
+
+    const memoryText = memories
+      .slice(0, 30)
+      .map((m) => `[${m.category}] ${m.title}: ${m.content}`)
+      .join("\n");
     const base64 = req.file.buffer.toString("base64");
 
     const systemPrompt = `
@@ -258,8 +265,16 @@ saat menganalisa gambar:
         messages: [
           {
             role: "system",
-            content: systemPrompt,
+            content: `
+${systemPrompt}
+
+MEMORY USER:
+
+${memoryText}
+`,
           },
+
+          ...history.slice(-10),
 
           {
             role: "user",
@@ -268,6 +283,7 @@ saat menganalisa gambar:
                 type: "text",
                 text: message,
               },
+
               {
                 type: "image_url",
                 image_url: {
