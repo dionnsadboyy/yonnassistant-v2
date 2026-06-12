@@ -207,16 +207,20 @@ let selectedImage = null;
    USER MESSAGE
 ========================================================= */
 
-function addUserMessage(text) {
+function addUserMessage(text, imageHtml = "") {
   emptyState.style.display = "none";
 
-  messages.innerHTML += `
-    <div class="user-message">
+  messages.insertAdjacentHTML(
+    "beforeend",
+    `
+      <div class="user-message">
       <div class="message-bubble">
-        ${formatMessage(text)}
+        ${imageHtml}
+        ${text ? formatMessage(text) : ""}
       </div>
     </div>
-  `;
+  `,
+  );
 
   scrollBottom();
 }
@@ -466,27 +470,16 @@ async function sendMessage(customText = null) {
       >
     `;
     }
-
-    messages.innerHTML += `
-    <div class="user-message">
-
-      <div class="message-bubble">
-
-        ${imageHtml}
-
-        ${text ? formatMessage(text) : ""}
-
-      </div>
-
-    </div>
-  `;
-
+    addUserMessage(text, imageHtml);
+    selectedImage = null;
+    imagePreview.style.display = "none";
+    imageInput.value = "";
     emptyState.style.display = "none";
-
     scrollBottom();
   }
   statusText.textContent = "Lagi mikir...";
   input.value = "";
+  input.style.height = "52px";
 
   const thinking = addThinkingMessage();
   try {
