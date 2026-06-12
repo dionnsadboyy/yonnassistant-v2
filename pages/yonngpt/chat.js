@@ -486,14 +486,6 @@ async function sendMessage(customText = null) {
     scrollBottom();
   }
   statusText.textContent = "Lagi mikir...";
-  if (text) {
-    addUserMessage(text);
-
-    addHistory("user", text);
-
-    updateEmptyState();
-  }
-
   input.value = "";
 
   const thinking = addThinkingMessage();
