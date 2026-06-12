@@ -236,11 +236,6 @@ function addThinkingMessage() {
   div.className = "bot-message thinking";
 
   div.innerHTML = `
-    <img
-      src="${ICONS.thinking}"
-      class="message-avatar"
-    >
-
     <div class="message-bubble">
 
       <div class="typing">
@@ -265,10 +260,6 @@ function addThinkingMessage() {
 
 function updateBotMessage(target, text, avatar = ICONS.analyzing) {
   target.innerHTML = `
-    <img
-      src="${avatar}"
-      class="message-avatar"
-    >
 
     <div class="message-bubble">
       ${formatMessage(text)}
@@ -502,7 +493,6 @@ async function sendMessage(customText = null) {
       const answer = result.answer || "tidak ada jawaban";
       statusText.textContent = "Ada gangguan";
       updateBotMessage(thinking, answer, detectAvatar(answer));
-
       addHistory("assistant", answer);
       statusText.textContent = "Siap ngobrol";
       selectedImage = null;
