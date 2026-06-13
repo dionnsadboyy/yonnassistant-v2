@@ -452,12 +452,18 @@ async function toggleRecording() {
 }
 
 async function sendMessage(customText = null) {
+  console.log("SEND");
+
+  console.log("selectedImage:", selectedImage);
+
+  console.log("hasImage:", !!selectedImage);
   console.log("IMAGE:", selectedImage);
   const text = customText || input.value.trim();
   if (text || selectedImage) {
     let imageHtml = "";
-
+    console.log("CHECK IMAGE");
     if (selectedImage) {
+      console.log("IMAGE BRANCH");
       const url = URL.createObjectURL(selectedImage);
 
       imageHtml = `
@@ -528,6 +534,7 @@ async function sendMessage(customText = null) {
       imagePreview.style.display = "none";
       imageInput.value = "";
     } else {
+      console.log("TEXT BRANCH");
       result = await askYonn(text);
     }
 
