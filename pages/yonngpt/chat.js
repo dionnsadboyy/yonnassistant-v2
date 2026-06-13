@@ -452,21 +452,19 @@ async function toggleRecording() {
 }
 
 async function sendMessage(customText = null) {
-  console.log("SEND");
-
-  console.log("selectedImage:", selectedImage);
-
-  console.log("hasImage:", !!selectedImage);
-  console.log("IMAGE:", selectedImage);
   const text = customText || input.value.trim();
-  if (text || selectedImage) {
-    let imageHtml = "";
-    console.log("CHECK IMAGE");
-    if (selectedImage) {
-      console.log("IMAGE BRANCH");
-      const url = URL.createObjectURL(selectedImage);
 
-      imageHtml = `
+  // simpan referensi gambar dulu
+  const imageFile = selectedImage;
+
+  if (!text && !imageFile) return;
+
+  let imageHtml = "";
+
+  if (imageFile) {
+    const url = URL.createObjectURL(imageFile);
+
+    imageHtml = `
       <img
         src="${url}"
         style="
@@ -476,40 +474,42 @@ async function sendMessage(customText = null) {
         "
       >
     `;
-    }
-    addUserMessage(text, imageHtml);
-    selectedImage = null;
-    imagePreview.style.display = "none";
-    imageInput.value = "";
-    emptyState.style.display = "none";
-    scrollBottom();
   }
+
+  // tampilkan bubble user langsung
+  addUserMessage(text, imageHtml);
+
+  emptyState.style.display = "none";
+
+  scrollBottom();
+
   statusText.textContent = "Obrolan sedang berlangsung";
+
   input.value = "";
   input.style.height = "52px";
 
+  // bersihkan preview setelah bubble muncul
+  selectedImage = null;
+  imagePreview.style.display = "none";
+  imageInput.value = "";
+
   const thinking = addThinkingMessage();
+
   try {
     let result;
 
-    if (selectedImage) {
+    // ==========================
+    // IMAGE MODE
+    // ==========================
+    if (imageFile) {
       const fd = new FormData();
 
-      fd.append("image", selectedImage);
-
+      fd.append("image", imageFile);
       fd.append("message", text || "Jelaskan isi gambar ini");
-
       fd.append("history", JSON.stringify(getChatHistory()));
+
       console.log("IMAGE MODE");
-
-      console.log(
-        "URL:",
-        "https://yonnassistant-v2-production.up.railway.app/api/ai/image",
-      );
-
-      console.log("FILE:", selectedImage?.name);
-
-      console.log("SIZE:", selectedImage?.size);
+      console.log("FILE:", imageFile.name);
 
       const response = await fetch(
         "https://yonnassistant-v2-production.up.railway.app/api/ai/image",
@@ -518,36 +518,44 @@ async function sendMessage(customText = null) {
           body: fd,
         },
       );
-      statusText.textContent = "Siap ngobrol";
+
       result = await response.json();
 
       if (!response.ok) {
         throw new Error(result.error || `HTTP ${response.status}`);
       }
+    }
 
-      const answer = result.answer || "tidak ada jawaban";
-      statusText.textContent = "Ada gangguan";
-      updateBotMessage(thinking, answer, detectAvatar(answer));
-      addHistory("assistant", answer);
-      statusText.textContent = "Siap ngobrol";
-      selectedImage = null;
-      imagePreview.style.display = "none";
-      imageInput.value = "";
-    } else {
-      console.log("TEXT BRANCH");
+    // ==========================
+    // TEXT MODE
+    // ==========================
+    else {
+      console.log("TEXT MODE");
+
       result = await askYonn(text);
     }
 
     const answer = result.answer || "tidak ada jawaban";
 
-    updateBotMessage(thinking, answer, detectAvatar(answer));
+    updateBotMessage(
+      thinking,
+      answer,
+      detectAvatar(answer),
+    );
 
     addHistory("assistant", answer);
+
+    statusText.textContent = "Siap ngobrol";
   } catch (err) {
-    statusText.textContent = "Ada gangguan";
     console.error(err);
 
-    updateBotMessage(thinking, err.message, ICONS.surprised);
+    statusText.textContent = "Ada gangguan";
+
+    updateBotMessage(
+      thinking,
+      err.message,
+      ICONS.surprised,
+    );
   }
 }
 /* =========================================================
