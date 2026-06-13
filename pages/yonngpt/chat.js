@@ -494,6 +494,16 @@ async function sendMessage(customText = null) {
       fd.append("message", text || "Jelaskan isi gambar ini");
 
       fd.append("history", JSON.stringify(getChatHistory()));
+      console.log("IMAGE MODE");
+
+      console.log(
+        "URL:",
+        "https://yonnassistant-v2-production.up.railway.app/api/ai/image",
+      );
+
+      console.log("FILE:", selectedImage?.name);
+
+      console.log("SIZE:", selectedImage?.size);
 
       const response = await fetch(
         "https://yonnassistant-v2-production.up.railway.app/api/ai/image",
