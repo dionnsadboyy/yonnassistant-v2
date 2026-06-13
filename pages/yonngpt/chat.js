@@ -53,6 +53,7 @@ document.getElementById("newChatBtn").addEventListener("click", (e) => {
    CHAT HISTORY
 ========================================================= */
 const CHAT_STORAGE_KEY = "yonn_chat_history";
+
 function getChatHistory() {
   return JSON.parse(localStorage.getItem(CHAT_STORAGE_KEY) || "[]");
 }
@@ -203,6 +204,7 @@ let mediaRecorder;
 let audioChunks = [];
 let isRecording = false;
 let selectedImage = null;
+
 /* =========================================================
    USER MESSAGE
 ========================================================= */
@@ -451,6 +453,7 @@ async function toggleRecording() {
   }
 }
 
+let isSending = false;
 async function sendMessage(customText = null) {
   const text = customText || input.value.trim();
 
@@ -537,11 +540,7 @@ async function sendMessage(customText = null) {
 
     const answer = result.answer || "tidak ada jawaban";
 
-    updateBotMessage(
-      thinking,
-      answer,
-      detectAvatar(answer),
-    );
+    updateBotMessage(thinking, answer, detectAvatar(answer));
 
     addHistory("assistant", answer);
 
@@ -551,19 +550,14 @@ async function sendMessage(customText = null) {
 
     statusText.textContent = "Ada gangguan";
 
-    updateBotMessage(
-      thinking,
-      err.message,
-      ICONS.surprised,
-    );
+    updateBotMessage(thinking, err.message, ICONS.surprised);
   }
 }
 /* =========================================================
    EVENTS
 ========================================================= */
-
 sendBtn.addEventListener("click", () => {
-  if (!input.value.trim()) {
+  if (!input.value.trim() && !selectedImage) {
     return;
   }
 
