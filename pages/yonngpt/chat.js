@@ -427,7 +427,14 @@ async function toggleRecording() {
       };
 
       mediaRecorder.start();
-
+      recordingTimeout = setTimeout(
+        () => {
+          if (isRecording) {
+            toggleRecording();
+          }
+        },
+        15 * 60 * 1000,
+      );
       isRecording = true;
 
       // tampil mode recording
@@ -445,6 +452,7 @@ async function toggleRecording() {
 
       micBtn.textContent = "🎤";
 
+      clearTimeout(recordingTimeout);
       mediaRecorder.stop();
     }
   } catch (err) {
