@@ -481,7 +481,8 @@ async function sendMessage(customText = null) {
 
   // tampilkan bubble user langsung
   addUserMessage(text, imageHtml);
-
+  // addHistory("user", text);
+  addHistory("user", text || "📷 gambar");
   emptyState.style.display = "none";
 
   scrollBottom();
